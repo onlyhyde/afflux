@@ -140,6 +140,7 @@ export function OutreachView() {
         {showTemplateEditor && (
           <TemplateEditor onClose={() => setShowTemplateEditor(false)} />
         )}
+        <TemplateList />
       </TabsContent>
 
       <TabsContent value="stats">
@@ -151,6 +152,42 @@ export function OutreachView() {
         </div>
       </TabsContent>
     </Tabs>
+  );
+}
+
+function TemplateList() {
+  const { data: templates, isLoading } = trpc.outreach.listTemplates.useQuery({});
+
+  if (isLoading) return <Skeleton className="h-32" />;
+  if (!templates || templates.length === 0) {
+    return (
+      <Card>
+        <CardContent className="py-8 text-center text-muted-foreground">
+          No templates yet. Create your first template above.
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      {templates.map((tmpl) => (
+        <Card key={tmpl.id}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-medium">{tmpl.name}</span>
+              <div className="flex gap-1">
+                <Badge variant="outline">{tmpl.channel.replace("_", " ")}</Badge>
+                <Badge variant="secondary">{tmpl.locale}</Badge>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground line-clamp-2">
+              {tmpl.body.slice(0, 120)}...
+            </p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 }
 
