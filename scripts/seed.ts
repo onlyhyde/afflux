@@ -3,8 +3,8 @@
  * Run with: pnpm db:seed
  */
 
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import { creators } from "../src/lib/db/schema";
 
 const CATEGORIES = [
@@ -83,8 +83,8 @@ function generateCreator(index: number) {
 }
 
 async function main() {
-  const sql = neon(process.env.DATABASE_URL!);
-  const db = drizzle(sql);
+  const client = postgres(process.env.DATABASE_URL!, { prepare: false });
+  const db = drizzle(client);
 
   console.log("Seeding 200 creators...");
 
