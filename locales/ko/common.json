@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Afflux",
+    "tagline": "AI 기반 TikTok Shop 어필리에이트 마케팅 플랫폼"
+  },
+  "nav": {
+    "dashboard": "대시보드",
+    "creators": "크리에이터",
+    "outreach": "아웃리치",
+    "crm": "CRM",
+    "analytics": "분석",
+    "content": "콘텐츠",
+    "campaigns": "캠페인",
+    "settings": "설정"
+  },
+  "auth": {
+    "signIn": "로그인",
+    "signUp": "회원가입",
+    "signOut": "로그아웃",
+    "email": "이메일",
+    "password": "비밀번호",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?"
+  },
+  "creators": {
+    "title": "크리에이터 검색",
+    "search": "크리에이터 검색...",
+    "filters": "필터",
+    "category": "카테고리",
+    "followers": "팔로워",
+    "engagement": "참여율",
+    "gmv": "GMV",
+    "country": "국가",
+    "addToList": "리스트에 추가",
+    "viewProfile": "프로필 보기",
+    "noResults": "조건에 맞는 크리에이터를 찾을 수 없습니다.",
+    "stats": {
+      "totalCreators": "총 크리에이터",
+      "avgEngagement": "평균 참여율",
+      "avgGmv": "평균 GMV"
+    }
+  },
+  "outreach": {
+    "title": "크리에이터 아웃리치",
+    "sendDm": "다이렉트 메시지 보내기",
+    "sendInvite": "협업 초대 보내기",
+    "sendEmail": "이메일 보내기",
+    "templates": "템플릿",
+    "createTemplate": "템플릿 만들기",
+    "editTemplate": "템플릿 수정",
+    "schedule": "예약",
+    "stats": {
+      "sent": "{count}건 메시지 발송 완료",
+      "responseRate": "응답률: {rate}%",
+      "dailyLimit": "일일 발송 한도에 도달했습니다 ({limit}건). {time}에 초기화됩니다."
+    },
+    "errors": {
+      "duplicate": "{date}에 이미 연락한 크리에이터입니다.",
+      "rateLimited": "발송 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+    }
+  },
+  "crm": {
+    "title": "크리에이터 CRM",
+    "pipeline": "파이프라인",
+    "stages": {
+      "discovered": "발굴",
+      "contacted": "접촉",
+      "negotiating": "협상 중",
+      "active": "활성",
+      "inactive": "비활성"
+    },
+    "addNote": "메모 추가",
+    "tags": "태그",
+    "history": "활동 내역"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "문제가 발생했습니다.",
+    "retry": "다시 시도",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "수정",
+    "create": "생성",
+    "search": "검색",
+    "filter": "필터",
+    "export": "내보내기",
+    "import": "가져오기",
+    "noData": "데이터가 없습니다.",
+    "confirm": "계속하시겠습니까?",
+    "yes": "예",
+    "no": "아니오"
+  }
+}

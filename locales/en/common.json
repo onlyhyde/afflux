@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Afflux",
+    "tagline": "AI-Powered TikTok Shop Affiliate Marketing Platform"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "creators": "Creators",
+    "outreach": "Outreach",
+    "crm": "CRM",
+    "analytics": "Analytics",
+    "content": "Content",
+    "campaigns": "Campaigns",
+    "settings": "Settings"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
+  },
+  "creators": {
+    "title": "Creator Search",
+    "search": "Search creators...",
+    "filters": "Filters",
+    "category": "Category",
+    "followers": "Followers",
+    "engagement": "Engagement Rate",
+    "gmv": "GMV",
+    "country": "Country",
+    "addToList": "Add to List",
+    "viewProfile": "View Profile",
+    "noResults": "No creators found matching your criteria.",
+    "stats": {
+      "totalCreators": "Total Creators",
+      "avgEngagement": "Avg. Engagement",
+      "avgGmv": "Avg. GMV"
+    }
+  },
+  "outreach": {
+    "title": "Creator Outreach",
+    "sendDm": "Send Direct Message",
+    "sendInvite": "Send Collaboration Invite",
+    "sendEmail": "Send Email",
+    "templates": "Templates",
+    "createTemplate": "Create Template",
+    "editTemplate": "Edit Template",
+    "schedule": "Schedule",
+    "stats": {
+      "sent": "{count} messages sent",
+      "responseRate": "Response Rate: {rate}%",
+      "dailyLimit": "Daily limit reached ({limit} messages). Resets at {time}."
+    },
+    "errors": {
+      "duplicate": "Already contacted this creator on {date}.",
+      "rateLimited": "Rate limit exceeded. Please try again later."
+    }
+  },
+  "crm": {
+    "title": "Creator CRM",
+    "pipeline": "Pipeline",
+    "stages": {
+      "discovered": "Discovered",
+      "contacted": "Contacted",
+      "negotiating": "Negotiating",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "addNote": "Add Note",
+    "tags": "Tags",
+    "history": "Activity History"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong.",
+    "retry": "Try Again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "noData": "No data available.",
+    "confirm": "Are you sure?",
+    "yes": "Yes",
+    "no": "No"
+  }
+}
