@@ -1,95 +1,95 @@
 {
   "app": {
     "name": "Afflux",
-    "tagline": "AI-Powered TikTok Shop Affiliate Marketing Platform"
+    "tagline": "Platform Pemasaran Afiliasi TikTok Shop Berbasis AI"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "creators": "Creators",
-    "outreach": "Outreach",
+    "dashboard": "Dasbor",
+    "creators": "Kreator",
+    "outreach": "Penjangkauan",
     "crm": "CRM",
-    "analytics": "Analytics",
-    "content": "Content",
-    "campaigns": "Campaigns",
-    "settings": "Settings"
+    "analytics": "Analitik",
+    "content": "Konten",
+    "campaigns": "Kampanye",
+    "settings": "Pengaturan"
   },
   "auth": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "signOut": "Sign Out",
+    "signIn": "Masuk",
+    "signUp": "Daftar",
+    "signOut": "Keluar",
     "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password?",
-    "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?"
+    "password": "Kata Sandi",
+    "forgotPassword": "Lupa kata sandi?",
+    "noAccount": "Belum punya akun?",
+    "hasAccount": "Sudah punya akun?"
   },
   "creators": {
-    "title": "Creator Search",
-    "search": "Search creators...",
-    "filters": "Filters",
-    "category": "Category",
-    "followers": "Followers",
-    "engagement": "Engagement Rate",
+    "title": "Pencarian Kreator",
+    "search": "Cari kreator...",
+    "filters": "Filter",
+    "category": "Kategori",
+    "followers": "Pengikut",
+    "engagement": "Tingkat Engagement",
     "gmv": "GMV",
-    "country": "Country",
-    "addToList": "Add to List",
-    "viewProfile": "View Profile",
-    "noResults": "No creators found matching your criteria.",
+    "country": "Negara",
+    "addToList": "Tambah ke Daftar",
+    "viewProfile": "Lihat Profil",
+    "noResults": "Tidak ada kreator yang sesuai dengan kriteria Anda.",
     "stats": {
-      "totalCreators": "Total Creators",
-      "avgEngagement": "Avg. Engagement",
-      "avgGmv": "Avg. GMV"
+      "totalCreators": "Total Kreator",
+      "avgEngagement": "Rata-rata Engagement",
+      "avgGmv": "Rata-rata GMV"
     }
   },
   "outreach": {
-    "title": "Creator Outreach",
-    "sendDm": "Send Direct Message",
-    "sendInvite": "Send Collaboration Invite",
-    "sendEmail": "Send Email",
-    "templates": "Templates",
-    "createTemplate": "Create Template",
+    "title": "Penjangkauan Kreator",
+    "sendDm": "Kirim Pesan Langsung",
+    "sendInvite": "Kirim Undangan Kolaborasi",
+    "sendEmail": "Kirim Email",
+    "templates": "Template",
+    "createTemplate": "Buat Template",
     "editTemplate": "Edit Template",
-    "schedule": "Schedule",
+    "schedule": "Jadwalkan",
     "stats": {
-      "sent": "{count} messages sent",
-      "responseRate": "Response Rate: {rate}%",
-      "dailyLimit": "Daily limit reached ({limit} messages). Resets at {time}."
+      "sent": "{count} pesan terkirim",
+      "responseRate": "Tingkat Respons: {rate}%",
+      "dailyLimit": "Batas harian tercapai ({limit} pesan). Reset pada {time}."
     },
     "errors": {
-      "duplicate": "Already contacted this creator on {date}.",
-      "rateLimited": "Rate limit exceeded. Please try again later."
+      "duplicate": "Sudah menghubungi kreator ini pada {date}.",
+      "rateLimited": "Batas pengiriman terlampaui. Silakan coba lagi nanti."
     }
   },
   "crm": {
-    "title": "Creator CRM",
+    "title": "CRM Kreator",
     "pipeline": "Pipeline",
     "stages": {
-      "discovered": "Discovered",
-      "contacted": "Contacted",
-      "negotiating": "Negotiating",
-      "active": "Active",
-      "inactive": "Inactive"
+      "discovered": "Ditemukan",
+      "contacted": "Dihubungi",
+      "negotiating": "Negosiasi",
+      "active": "Aktif",
+      "inactive": "Tidak Aktif"
     },
-    "addNote": "Add Note",
-    "tags": "Tags",
-    "history": "Activity History"
+    "addNote": "Tambah Catatan",
+    "tags": "Tag",
+    "history": "Riwayat Aktivitas"
   },
   "common": {
-    "loading": "Loading...",
-    "error": "Something went wrong.",
-    "retry": "Try Again",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan.",
+    "retry": "Coba Lagi",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
     "edit": "Edit",
-    "create": "Create",
-    "search": "Search",
+    "create": "Buat",
+    "search": "Cari",
     "filter": "Filter",
-    "export": "Export",
-    "import": "Import",
-    "noData": "No data available.",
-    "confirm": "Are you sure?",
-    "yes": "Yes",
-    "no": "No"
+    "export": "Ekspor",
+    "import": "Impor",
+    "noData": "Tidak ada data.",
+    "confirm": "Apakah Anda yakin?",
+    "yes": "Ya",
+    "no": "Tidak"
   }
 }

@@ -1,95 +1,95 @@
 {
   "app": {
     "name": "Afflux",
-    "tagline": "AI-Powered TikTok Shop Affiliate Marketing Platform"
+    "tagline": "AI搭載 TikTok Shopアフィリエイトマーケティングプラットフォーム"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "creators": "Creators",
-    "outreach": "Outreach",
+    "dashboard": "ダッシュボード",
+    "creators": "クリエイター",
+    "outreach": "アウトリーチ",
     "crm": "CRM",
-    "analytics": "Analytics",
-    "content": "Content",
-    "campaigns": "Campaigns",
-    "settings": "Settings"
+    "analytics": "分析",
+    "content": "コンテンツ",
+    "campaigns": "キャンペーン",
+    "settings": "設定"
   },
   "auth": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "signOut": "Sign Out",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password?",
-    "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?"
+    "signIn": "ログイン",
+    "signUp": "アカウント作成",
+    "signOut": "ログアウト",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？"
   },
   "creators": {
-    "title": "Creator Search",
-    "search": "Search creators...",
-    "filters": "Filters",
-    "category": "Category",
-    "followers": "Followers",
-    "engagement": "Engagement Rate",
+    "title": "クリエイター検索",
+    "search": "クリエイターを検索...",
+    "filters": "フィルター",
+    "category": "カテゴリ",
+    "followers": "フォロワー",
+    "engagement": "エンゲージメント率",
     "gmv": "GMV",
-    "country": "Country",
-    "addToList": "Add to List",
-    "viewProfile": "View Profile",
-    "noResults": "No creators found matching your criteria.",
+    "country": "国",
+    "addToList": "リストに追加",
+    "viewProfile": "プロフィールを見る",
+    "noResults": "条件に一致するクリエイターが見つかりません。",
     "stats": {
-      "totalCreators": "Total Creators",
-      "avgEngagement": "Avg. Engagement",
-      "avgGmv": "Avg. GMV"
+      "totalCreators": "クリエイター総数",
+      "avgEngagement": "平均エンゲージメント",
+      "avgGmv": "平均GMV"
     }
   },
   "outreach": {
-    "title": "Creator Outreach",
-    "sendDm": "Send Direct Message",
-    "sendInvite": "Send Collaboration Invite",
-    "sendEmail": "Send Email",
-    "templates": "Templates",
-    "createTemplate": "Create Template",
-    "editTemplate": "Edit Template",
-    "schedule": "Schedule",
+    "title": "クリエイターアウトリーチ",
+    "sendDm": "ダイレクトメッセージを送信",
+    "sendInvite": "コラボ招待を送信",
+    "sendEmail": "メールを送信",
+    "templates": "テンプレート",
+    "createTemplate": "テンプレートを作成",
+    "editTemplate": "テンプレートを編集",
+    "schedule": "スケジュール",
     "stats": {
-      "sent": "{count} messages sent",
-      "responseRate": "Response Rate: {rate}%",
-      "dailyLimit": "Daily limit reached ({limit} messages). Resets at {time}."
+      "sent": "{count}件送信済み",
+      "responseRate": "応答率: {rate}%",
+      "dailyLimit": "日次送信上限に達しました（{limit}件）。{time}にリセットされます。"
     },
     "errors": {
-      "duplicate": "Already contacted this creator on {date}.",
-      "rateLimited": "Rate limit exceeded. Please try again later."
+      "duplicate": "{date}に既にこのクリエイターに連絡済みです。",
+      "rateLimited": "送信制限を超えました。しばらくしてから再試行してください。"
     }
   },
   "crm": {
-    "title": "Creator CRM",
-    "pipeline": "Pipeline",
+    "title": "クリエイターCRM",
+    "pipeline": "パイプライン",
     "stages": {
-      "discovered": "Discovered",
-      "contacted": "Contacted",
-      "negotiating": "Negotiating",
-      "active": "Active",
-      "inactive": "Inactive"
+      "discovered": "発見",
+      "contacted": "連絡済み",
+      "negotiating": "交渉中",
+      "active": "アクティブ",
+      "inactive": "非アクティブ"
     },
-    "addNote": "Add Note",
-    "tags": "Tags",
-    "history": "Activity History"
+    "addNote": "メモを追加",
+    "tags": "タグ",
+    "history": "活動履歴"
   },
   "common": {
-    "loading": "Loading...",
-    "error": "Something went wrong.",
-    "retry": "Try Again",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "search": "Search",
-    "filter": "Filter",
-    "export": "Export",
-    "import": "Import",
-    "noData": "No data available.",
-    "confirm": "Are you sure?",
-    "yes": "Yes",
-    "no": "No"
+    "loading": "読み込み中...",
+    "error": "問題が発生しました。",
+    "retry": "再試行",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "search": "検索",
+    "filter": "フィルター",
+    "export": "エクスポート",
+    "import": "インポート",
+    "noData": "データがありません。",
+    "confirm": "よろしいですか？",
+    "yes": "はい",
+    "no": "いいえ"
   }
 }

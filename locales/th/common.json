@@ -1,95 +1,95 @@
 {
   "app": {
     "name": "Afflux",
-    "tagline": "AI-Powered TikTok Shop Affiliate Marketing Platform"
+    "tagline": "แพลตฟอร์มการตลาดพันธมิตร TikTok Shop ที่ขับเคลื่อนด้วย AI"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "creators": "Creators",
-    "outreach": "Outreach",
+    "dashboard": "แดชบอร์ด",
+    "creators": "ครีเอเตอร์",
+    "outreach": "การเข้าถึง",
     "crm": "CRM",
-    "analytics": "Analytics",
-    "content": "Content",
-    "campaigns": "Campaigns",
-    "settings": "Settings"
+    "analytics": "การวิเคราะห์",
+    "content": "เนื้อหา",
+    "campaigns": "แคมเปญ",
+    "settings": "การตั้งค่า"
   },
   "auth": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "signOut": "Sign Out",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password?",
-    "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?"
+    "signIn": "เข้าสู่ระบบ",
+    "signUp": "สมัครสมาชิก",
+    "signOut": "ออกจากระบบ",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "noAccount": "ยังไม่มีบัญชี?",
+    "hasAccount": "มีบัญชีอยู่แล้ว?"
   },
   "creators": {
-    "title": "Creator Search",
-    "search": "Search creators...",
-    "filters": "Filters",
-    "category": "Category",
-    "followers": "Followers",
-    "engagement": "Engagement Rate",
+    "title": "ค้นหาครีเอเตอร์",
+    "search": "ค้นหาครีเอเตอร์...",
+    "filters": "ตัวกรอง",
+    "category": "หมวดหมู่",
+    "followers": "ผู้ติดตาม",
+    "engagement": "อัตราการมีส่วนร่วม",
     "gmv": "GMV",
-    "country": "Country",
-    "addToList": "Add to List",
-    "viewProfile": "View Profile",
-    "noResults": "No creators found matching your criteria.",
+    "country": "ประเทศ",
+    "addToList": "เพิ่มในรายการ",
+    "viewProfile": "ดูโปรไฟล์",
+    "noResults": "ไม่พบครีเอเตอร์ที่ตรงกับเกณฑ์ของคุณ",
     "stats": {
-      "totalCreators": "Total Creators",
-      "avgEngagement": "Avg. Engagement",
-      "avgGmv": "Avg. GMV"
+      "totalCreators": "จำนวนครีเอเตอร์ทั้งหมด",
+      "avgEngagement": "อัตราการมีส่วนร่วมเฉลี่ย",
+      "avgGmv": "GMV เฉลี่ย"
     }
   },
   "outreach": {
-    "title": "Creator Outreach",
-    "sendDm": "Send Direct Message",
-    "sendInvite": "Send Collaboration Invite",
-    "sendEmail": "Send Email",
-    "templates": "Templates",
-    "createTemplate": "Create Template",
-    "editTemplate": "Edit Template",
-    "schedule": "Schedule",
+    "title": "การเข้าถึงครีเอเตอร์",
+    "sendDm": "ส่งข้อความตรง",
+    "sendInvite": "ส่งคำเชิญร่วมงาน",
+    "sendEmail": "ส่งอีเมล",
+    "templates": "เทมเพลต",
+    "createTemplate": "สร้างเทมเพลต",
+    "editTemplate": "แก้ไขเทมเพลต",
+    "schedule": "กำหนดเวลา",
     "stats": {
-      "sent": "{count} messages sent",
-      "responseRate": "Response Rate: {rate}%",
-      "dailyLimit": "Daily limit reached ({limit} messages). Resets at {time}."
+      "sent": "ส่งแล้ว {count} ข้อความ",
+      "responseRate": "อัตราการตอบกลับ: {rate}%",
+      "dailyLimit": "ถึงขีดจำกัดรายวันแล้ว ({limit} ข้อความ) รีเซ็ตเมื่อ {time}"
     },
     "errors": {
-      "duplicate": "Already contacted this creator on {date}.",
-      "rateLimited": "Rate limit exceeded. Please try again later."
+      "duplicate": "ติดต่อครีเอเตอร์นี้แล้วเมื่อ {date}",
+      "rateLimited": "เกินขีดจำกัดการส่ง กรุณาลองใหม่ภายหลัง"
     }
   },
   "crm": {
-    "title": "Creator CRM",
-    "pipeline": "Pipeline",
+    "title": "CRM ครีเอเตอร์",
+    "pipeline": "ไปป์ไลน์",
     "stages": {
-      "discovered": "Discovered",
-      "contacted": "Contacted",
-      "negotiating": "Negotiating",
-      "active": "Active",
-      "inactive": "Inactive"
+      "discovered": "ค้นพบ",
+      "contacted": "ติดต่อแล้ว",
+      "negotiating": "เจรจา",
+      "active": "ใช้งาน",
+      "inactive": "ไม่ใช้งาน"
     },
-    "addNote": "Add Note",
-    "tags": "Tags",
-    "history": "Activity History"
+    "addNote": "เพิ่มบันทึก",
+    "tags": "แท็ก",
+    "history": "ประวัติกิจกรรม"
   },
   "common": {
-    "loading": "Loading...",
-    "error": "Something went wrong.",
-    "retry": "Try Again",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "search": "Search",
-    "filter": "Filter",
-    "export": "Export",
-    "import": "Import",
-    "noData": "No data available.",
-    "confirm": "Are you sure?",
-    "yes": "Yes",
-    "no": "No"
+    "loading": "กำลังโหลด...",
+    "error": "เกิดข้อผิดพลาด",
+    "retry": "ลองอีกครั้ง",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "create": "สร้าง",
+    "search": "ค้นหา",
+    "filter": "กรอง",
+    "export": "ส่งออก",
+    "import": "นำเข้า",
+    "noData": "ไม่มีข้อมูล",
+    "confirm": "คุณแน่ใจหรือไม่?",
+    "yes": "ใช่",
+    "no": "ไม่"
   }
 }
