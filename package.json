@@ -17,6 +17,7 @@
     "db:seed:dev": "npx dotenv -e .env.local -- tsx scripts/db-seed-dev.ts",
     "db:reset": "npx dotenv -e .env.local -- tsx scripts/db-reset.ts",
     "db:verify": "npx dotenv -e .env.local -- tsx scripts/db-verify.ts",
+    "worker:dev": "npx dotenv -e .env.local -- tsx --tsconfig tsconfig.json src/worker/index.ts",
     "setup": "pnpm docker:up && pnpm db:push && pnpm db:custom && pnpm db:seed:dev",
     "docker:up": "docker compose -f docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f docker/docker-compose.yml down"
