@@ -12,7 +12,12 @@
     "db:generate": "npx dotenv -e .env.local -- drizzle-kit generate",
     "db:push": "npx dotenv -e .env.local -- drizzle-kit push",
     "db:studio": "npx dotenv -e .env.local -- drizzle-kit studio",
+    "db:custom": "npx dotenv -e .env.local -- tsx scripts/db-custom.ts",
     "db:seed": "npx dotenv -e .env.local -- tsx scripts/seed.ts",
+    "db:seed:dev": "npx dotenv -e .env.local -- tsx scripts/db-seed-dev.ts",
+    "db:reset": "npx dotenv -e .env.local -- tsx scripts/db-reset.ts",
+    "db:verify": "npx dotenv -e .env.local -- tsx scripts/db-verify.ts",
+    "setup": "pnpm docker:up && pnpm db:push && pnpm db:custom && pnpm db:seed:dev",
     "docker:up": "docker compose -f docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f docker/docker-compose.yml down"
   },
@@ -54,10 +59,12 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.1",
     "dotenv": "^17.4.0",
+    "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.2"
   }
