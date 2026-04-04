@@ -105,4 +105,35 @@ export const outreachRouter = createTRPCRouter({
 
       return stats[0] ?? { total: 0, sent: 0, delivered: 0, opened: 0, replied: 0, failed: 0 };
     }),
+
+  // ── Campaign Execution ──────────────────────────
+
+  startCampaign: publicProcedure
+    .input(z.object({ campaignId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const { executeCampaign } = await import("@/server/services/outreach-executor");
+      const { getPlanLimits } = await import("@/server/services/plan-limits");
+
+      // Get tenant plan limits
+      const tenantId = ctx.tenantId ?? "00000000-0000-0000-0000-000000000000";
+      const limits = getPlanLimits("growth"); // TODO: get from actual tenant plan
+
+      return executeCampaign({
+        campaignId: input.campaignId,
+        tenantId,
+        userId: ctx.userId ?? "",
+        dailyLimit: limits.dmPerMonth / 30, // Approximate daily from monthly
+      });
+    }),
+
+  pauseCampaign: publicProcedure
+    .input(z.object({ campaignId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db
+        .update(outreachCampaigns)
+        .set({ status: "paused", updatedAt: new Date() })
+        .where(eq(outreachCampaigns.id, input.campaignId))
+        .returning();
+      return result[0];
+    }),
 });
