@@ -7,6 +7,7 @@ import { matchingRouter } from "@/server/routers/matching";
 import { analyticsRouter } from "@/server/routers/analytics";
 import { notificationRouter } from "@/server/routers/notification";
 import { settingsRouter } from "@/server/routers/settings";
+import { adminRouter } from "@/server/routers/admin";
 
 export const appRouter = createTRPCRouter({
   creator: creatorRouter,
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   analytics: analyticsRouter,
   notification: notificationRouter,
   settings: settingsRouter,
+  admin: adminRouter,
 });
 
 export type AppRouter = typeof appRouter;
