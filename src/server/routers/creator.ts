@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/init";
 import { creators } from "@/lib/db/schema";
 import { desc, asc, ilike, and, gte, lte, eq, sql } from "drizzle-orm";
+import { buildSearchQuery, sanitizeSearchInput } from "@/lib/search/fulltext";
 
 const creatorFilterSchema = z.object({
   search: z.string().optional(),
@@ -27,9 +28,15 @@ export const creatorRouter = createTRPCRouter({
     const conditions = [];
 
     if (input.search) {
-      conditions.push(
-        sql`(${creators.username} ILIKE ${`%${input.search}%`} OR ${creators.displayName} ILIKE ${`%${input.search}%`} OR ${creators.bio} ILIKE ${`%${input.search}%`})`
-      );
+      const tsquery = buildSearchQuery(input.search);
+      if (tsquery) {
+        // Use tsvector indexed search when available, fallback to ILIKE
+        conditions.push(
+          sql`(${creators.searchVector} @@ plainto_tsquery('english', ${sanitizeSearchInput(input.search)})
+            OR ${creators.username} ILIKE ${`%${input.search}%`}
+            OR ${creators.displayName} ILIKE ${`%${input.search}%`})`
+        );
+      }
     }
     if (input.category) {
       conditions.push(eq(creators.category, input.category));
