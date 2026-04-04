@@ -9,11 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Send, Mail, MessageSquare, Plus, Play, Pause } from "lucide-react";
 import { TemplateEditor } from "./template-editor";
+import { CampaignCreateForm } from "./campaign-create-form";
 import { trpc } from "@/lib/trpc/client";
 
 export function OutreachView() {
   const t = useTranslations();
   const [showTemplateEditor, setShowTemplateEditor] = useState(false);
+  const [showCampaignForm, setShowCampaignForm] = useState(false);
+  const utils = trpc.useUtils();
 
   const { data: campaigns, isLoading: campaignsLoading } =
     trpc.outreach.listCampaigns.useQuery();
@@ -43,11 +46,18 @@ export function OutreachView() {
           <p className="text-muted-foreground">
             Create and manage outreach campaigns to connect with creators.
           </p>
-          <Button>
+          <Button onClick={() => setShowCampaignForm(!showCampaignForm)}>
             <Plus className="mr-2 h-4 w-4" />
             New Campaign
           </Button>
         </div>
+
+        {showCampaignForm && (
+          <CampaignCreateForm
+            onClose={() => setShowCampaignForm(false)}
+            onCreated={() => utils.outreach.listCampaigns.invalidate()}
+          />
+        )}
 
         {campaignsLoading ? (
           <div className="grid gap-4 md:grid-cols-3">

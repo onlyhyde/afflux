@@ -16,6 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, Download } from "lucide-react";
 import { CreatorTable } from "./creator-table";
 import { formatCompactNumber } from "@/lib/i18n/config";
+import { trpc } from "@/lib/trpc/client";
+import { creatorsToCSV } from "@/lib/export/csv";
 
 const CATEGORIES = [
   "Beauty", "Fashion", "Food", "Tech", "Fitness",
@@ -50,6 +52,27 @@ export function CreatorSearchView() {
   });
   const [showFilters, setShowFilters] = useState(false);
 
+  const exportQuery = trpc.creator.list.useQuery({
+    sortBy: "followers",
+    sortOrder: "desc",
+    page: 1,
+    pageSize: 100,
+  }, { enabled: false }); // Only fetch when export clicked
+
+  async function handleExport() {
+    const result = await exportQuery.refetch();
+    if (result.data?.items) {
+      const csv = creatorsToCSV(result.data.items);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `creators-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
   function updateFilter(key: keyof Filters, value: string) {
     setFilters((prev) => ({ ...prev, [key]: value }));
   }
@@ -74,7 +97,7 @@ export function CreatorSearchView() {
           <Filter className="mr-2 h-4 w-4" />
           {t("common.filter")}
         </Button>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" />
           {t("common.export")}
         </Button>
