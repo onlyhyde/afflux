@@ -23,6 +23,24 @@ export const LOCALE_CONFIGS: Record<string, LocaleConfig> = {
     timezone: "Asia/Seoul",
     direction: "ltr",
   },
+  ja: {
+    currency: "JPY",
+    dateFormat: "YYYY/MM/DD",
+    timezone: "Asia/Tokyo",
+    direction: "ltr",
+  },
+  id: {
+    currency: "IDR",
+    dateFormat: "DD/MM/YYYY",
+    timezone: "Asia/Jakarta",
+    direction: "ltr",
+  },
+  th: {
+    currency: "THB",
+    dateFormat: "DD/MM/YYYY",
+    timezone: "Asia/Bangkok",
+    direction: "ltr",
+  },
 };
 
 export function formatCurrency(amount: number, locale: string): string {
