@@ -16,6 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { UserPlus, Eye } from "lucide-react";
 import { formatCompactNumber, formatCurrency } from "@/lib/i18n/config";
 import { trpc } from "@/lib/trpc/client";
+import { Link } from "@/lib/i18n/routing";
 
 interface CreatorTableProps {
   filters: {
@@ -131,8 +132,10 @@ export function CreatorTable({ filters }: CreatorTableProps) {
               </TableCell>
               <TableCell>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" title={t("creators.viewProfile")}>
-                    <Eye className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" title={t("creators.viewProfile")} asChild>
+                    <Link href={`/creators/${creator.id}`}>
+                      <Eye className="h-4 w-4" />
+                    </Link>
                   </Button>
                   <Button variant="ghost" size="icon" title={t("creators.addToList")}>
                     <UserPlus className="h-4 w-4" />

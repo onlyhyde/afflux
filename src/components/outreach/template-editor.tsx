@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { trpc } from "@/lib/trpc/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,9 +40,19 @@ export function TemplateEditor({ onClose }: TemplateEditorProps) {
     setBody((prev) => prev + `{{${key}}}`);
   }
 
+  const createTemplate = trpc.outreach.createTemplate.useMutation({
+    onSuccess: () => onClose(),
+    onError: (err) => console.error("Failed to save template:", err),
+  });
+
   function handleSave() {
-    // TODO: Call tRPC mutation
-    onClose();
+    if (!name || !body) return;
+    createTemplate.mutate({
+      name,
+      channel: channel as "tiktok_dm" | "tiktok_invite" | "email",
+      subject: channel === "email" ? subject : undefined,
+      body,
+    });
   }
 
   return (
