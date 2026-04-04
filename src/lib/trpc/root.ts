@@ -9,6 +9,7 @@ import { notificationRouter } from "@/server/routers/notification";
 import { settingsRouter } from "@/server/routers/settings";
 import { adminRouter } from "@/server/routers/admin";
 import { billingRouter } from "@/server/routers/billing";
+import { campaignRouter } from "@/server/routers/campaign";
 
 export const appRouter = createTRPCRouter({
   creator: creatorRouter,
@@ -21,6 +22,7 @@ export const appRouter = createTRPCRouter({
   settings: settingsRouter,
   admin: adminRouter,
   billing: billingRouter,
+  campaign: campaignRouter,
 });
 
 export type AppRouter = typeof appRouter;
