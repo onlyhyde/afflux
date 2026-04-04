@@ -17,6 +17,7 @@ import { UserPlus, Eye } from "lucide-react";
 import { formatCompactNumber, formatCurrency } from "@/lib/i18n/config";
 import { trpc } from "@/lib/trpc/client";
 import { Link } from "@/lib/i18n/routing";
+import { AddToListDialog } from "./add-to-list-dialog";
 
 interface CreatorTableProps {
   filters: {
@@ -137,9 +138,7 @@ export function CreatorTable({ filters }: CreatorTableProps) {
                       <Eye className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button variant="ghost" size="icon" title={t("creators.addToList")}>
-                    <UserPlus className="h-4 w-4" />
-                  </Button>
+                  <AddToListDialog creatorId={creator.id} />
                 </div>
               </TableCell>
             </TableRow>
