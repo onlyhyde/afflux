@@ -12,8 +12,16 @@ import {
   pgEnum,
   check,
   varchar,
+  customType,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+
+// Custom tsvector type for full-text search (PostgreSQL native)
+const tsvector = customType<{ data: string }>({
+  dataType() {
+    return "tsvector";
+  },
+});
 
 // ═══════════════════════════════════════════════════════════
 // ENUMS
@@ -386,6 +394,8 @@ export const creators = pgTable(
     isTiktokShopCreator: boolean("is_tiktok_shop_creator").default(false),
     lastActiveAt: timestamp("last_active_at", { withTimezone: true }),
     dataUpdatedAt: timestamp("data_updated_at", { withTimezone: true }),
+    // tsvector for full-text search (GENERATED ALWAYS AS ... STORED via migration)
+    searchVector: tsvector("search_vector"),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
@@ -402,8 +412,6 @@ export const creators = pgTable(
     check("creators_engagement_positive", sql`${table.engagementRate} >= 0 OR ${table.engagementRate} IS NULL`),
     check("creators_gmv_positive", sql`${table.gmv} >= 0 OR ${table.gmv} IS NULL`),
     check("creators_trust_score_range", sql`${table.trustScore} BETWEEN 0 AND 100 OR ${table.trustScore} IS NULL`),
-    // GIN indexes for JSONB columns (AI matching engine filters)
-    // Note: These are added via raw SQL migration since Drizzle doesn't support USING gin
   ]
 );
 
