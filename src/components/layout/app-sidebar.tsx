@@ -26,6 +26,7 @@ import {
   Settings,
 } from "lucide-react";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { NotificationBell } from "@/components/layout/notification-bell";
 
 const navItems = [
   { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -71,8 +72,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t p-4">
-        <LocaleSwitcher />
+      <SidebarFooter className="border-t p-4 flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <LocaleSwitcher />
+          <NotificationBell />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
