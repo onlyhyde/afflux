@@ -2,6 +2,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/lib/i18n/routing";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { TRPCProvider } from "@/components/providers/trpc-provider";
 
 export default async function LocaleLayout({
   children,
@@ -27,7 +28,7 @@ export default async function LocaleLayout({
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <TRPCProvider>{children}</TRPCProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );
