@@ -15,21 +15,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserPlus, Eye } from "lucide-react";
 import { formatCompactNumber, formatCurrency } from "@/lib/i18n/config";
-
-// Placeholder type until tRPC client is wired
-interface Creator {
-  id: string;
-  username: string;
-  displayName: string | null;
-  avatarUrl: string | null;
-  followers: number;
-  engagementRate: string | null;
-  gmv: string | null;
-  category: string | null;
-  country: string | null;
-  isTiktokShopCreator: boolean;
-  trustScore: number | null;
-}
+import { trpc } from "@/lib/trpc/client";
 
 interface CreatorTableProps {
   filters: {
@@ -41,30 +27,24 @@ interface CreatorTableProps {
   };
 }
 
-// Temporary mock data until tRPC client is connected
-const MOCK_CREATORS: Creator[] = Array.from({ length: 10 }, (_, i) => ({
-  id: `${i + 1}`,
-  username: `creator_${i + 1}`,
-  displayName: `Creator ${i + 1}`,
-  avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=creator${i + 1}`,
-  followers: Math.floor(Math.random() * 1000000) + 1000,
-  engagementRate: (Math.random() * 10 + 0.5).toFixed(2),
-  gmv: (Math.random() * 100000).toFixed(2),
-  category: ["Beauty", "Fashion", "Food", "Tech", "Fitness"][i % 5],
-  country: ["US", "KR", "GB", "JP", "ID"][i % 5],
-  isTiktokShopCreator: Math.random() > 0.3,
-  trustScore: Math.floor(Math.random() * 50) + 50,
-}));
-
 export function CreatorTable({ filters }: CreatorTableProps) {
   const t = useTranslations();
   const locale = useLocale();
 
-  // TODO: Replace with tRPC query
-  const creators = MOCK_CREATORS;
-  const loading = false;
+  const { data, isLoading, error } = trpc.creator.list.useQuery({
+    search: filters.search || undefined,
+    category: filters.category && filters.category !== "all" ? filters.category : undefined,
+    country: filters.country && filters.country !== "all" ? filters.country : undefined,
+    minFollowers: filters.minFollowers && filters.minFollowers !== "any"
+      ? Number(filters.minFollowers)
+      : undefined,
+    sortBy: (filters.sortBy as "followers" | "engagement_rate" | "gmv" | "created_at") || "followers",
+    sortOrder: "desc",
+    page: 1,
+    pageSize: 20,
+  });
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col gap-2">
         {Array.from({ length: 5 }).map((_, i) => (
@@ -73,6 +53,16 @@ export function CreatorTable({ filters }: CreatorTableProps) {
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-12 text-destructive">
+        {t("common.error")}
+      </div>
+    );
+  }
+
+  const creators = data?.items ?? [];
 
   if (creators.length === 0) {
     return (
@@ -153,6 +143,14 @@ export function CreatorTable({ filters }: CreatorTableProps) {
           ))}
         </TableBody>
       </Table>
+
+      {data && data.totalPages > 1 && (
+        <div className="flex items-center justify-between border-t px-4 py-3 text-sm text-muted-foreground">
+          <span>
+            {data.total} creators, page {data.page}/{data.totalPages}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
