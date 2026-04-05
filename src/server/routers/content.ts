@@ -21,8 +21,23 @@ export const contentRouter = createTRPCRouter({
       const offset = (input.page - 1) * input.pageSize;
 
       return ctx.db
-        .select()
+        .select({
+          id: contents.id,
+          tiktokVideoId: contents.tiktokVideoId,
+          title: contents.title,
+          views: contents.views,
+          likes: contents.likes,
+          comments: contents.comments,
+          shares: contents.shares,
+          conversions: contents.conversions,
+          gmv: contents.gmv,
+          publishedAt: contents.publishedAt,
+          creatorId: contents.creatorId,
+          creatorUsername: creators.username,
+          creatorDisplayName: creators.displayName,
+        })
         .from(contents)
+        .leftJoin(creators, eq(contents.creatorId, creators.id))
         .where(conditions.length > 0 ? and(...conditions) : undefined)
         .orderBy(desc(contents.publishedAt))
         .limit(input.pageSize)
@@ -66,8 +81,19 @@ export const contentRouter = createTRPCRouter({
       const offset = (input.page - 1) * input.pageSize;
 
       return ctx.db
-        .select()
+        .select({
+          id: sparkCodes.id,
+          tenantId: sparkCodes.tenantId,
+          creatorId: sparkCodes.creatorId,
+          code: sparkCodes.code,
+          status: sparkCodes.status,
+          expiresAt: sparkCodes.expiresAt,
+          createdAt: sparkCodes.createdAt,
+          creatorUsername: creators.username,
+          creatorDisplayName: creators.displayName,
+        })
         .from(sparkCodes)
+        .leftJoin(creators, eq(sparkCodes.creatorId, creators.id))
         .where(conditions.length > 0 ? and(...conditions) : undefined)
         .orderBy(desc(sparkCodes.createdAt))
         .limit(input.pageSize)

@@ -92,7 +92,7 @@ export const campaignRouter = createTRPCRouter({
       const result = await ctx.db
         .insert(samples)
         .values({
-          tenantId: ctx.tenantId ?? "00000000-0000-0000-0000-000000000000",
+          tenantId: ctx.tenantId!,
           productId: input.productId,
           creatorId: input.creatorId,
           status: "requested",
@@ -170,7 +170,7 @@ export const campaignRouter = createTRPCRouter({
       const result = await ctx.db
         .insert(contests)
         .values({
-          tenantId: ctx.tenantId ?? "00000000-0000-0000-0000-000000000000",
+          tenantId: ctx.tenantId!,
           name: input.name,
           description: input.description,
           status: "draft",
@@ -223,7 +223,7 @@ export const campaignRouter = createTRPCRouter({
       const result = await ctx.db
         .insert(competitorBrands)
         .values({
-          tenantId: ctx.tenantId ?? "00000000-0000-0000-0000-000000000000",
+          tenantId: ctx.tenantId!,
           name: input.name,
           tiktokShopUrl: input.tiktokShopUrl,
           category: input.category,

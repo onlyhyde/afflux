@@ -33,19 +33,19 @@ export default function DashboardPage() {
           value={formatCompactNumber(data?.totalCreators ?? 0, locale)}
         />
         <StatCard
-          title="Messages Sent"
+          title={t("dashboard.messagesSent")}
           value={formatCompactNumber(data?.messagesSent ?? 0, locale)}
-          subtitle={`${data?.responseRate ?? 0}% response rate`}
+          subtitle={`${data?.responseRate ?? 0}% ${t("dashboard.responseRate")}`}
         />
         <StatCard
-          title="Active Creators"
+          title={t("dashboard.activeCreators")}
           value={String(data?.activeCreators ?? 0)}
-          subtitle={`of ${data?.totalCrmCreators ?? 0} in CRM`}
+          subtitle={`${data?.totalCrmCreators ?? 0} ${t("dashboard.inCrm")}`}
         />
         <StatCard
           title={t("creators.stats.avgGmv")}
           value={formatCurrency(data?.totalGmv ?? 0, locale)}
-          subtitle="total GMV"
+          subtitle={t("dashboard.totalGmv")}
         />
       </div>
     </div>

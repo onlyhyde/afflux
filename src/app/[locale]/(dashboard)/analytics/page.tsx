@@ -27,7 +27,7 @@ export default function AnalyticsPage() {
           <>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">Total GMV</CardTitle>
+                <CardTitle className="text-sm text-muted-foreground">{t("analytics.totalGmv")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold font-mono">
@@ -37,7 +37,7 @@ export default function AnalyticsPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">Total Views</CardTitle>
+                <CardTitle className="text-sm text-muted-foreground">{t("analytics.totalViews")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold font-mono">
@@ -47,7 +47,7 @@ export default function AnalyticsPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">Conversions</CardTitle>
+                <CardTitle className="text-sm text-muted-foreground">{t("analytics.conversions")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold font-mono">
@@ -57,7 +57,7 @@ export default function AnalyticsPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">Content Count</CardTitle>
+                <CardTitle className="text-sm text-muted-foreground">{t("analytics.contentCount")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold font-mono">
@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
       {/* Top Creators */}
       <Card>
         <CardHeader>
-          <CardTitle>Top Creators by GMV</CardTitle>
+          <CardTitle>{t("analytics.topCreatorsByGmv")}</CardTitle>
         </CardHeader>
         <CardContent>
           {creatorsLoading ? (

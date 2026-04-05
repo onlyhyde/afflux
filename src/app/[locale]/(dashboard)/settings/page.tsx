@@ -22,9 +22,9 @@ export default function SettingsPage() {
 
       <Tabs defaultValue="general" className="flex flex-col gap-4">
         <TabsList className="w-fit">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
+          <TabsTrigger value="general">{t("settings.general")}</TabsTrigger>
+          <TabsTrigger value="team">{t("settings.team")}</TabsTrigger>
+          <TabsTrigger value="billing">{t("settings.billing")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
@@ -44,10 +44,11 @@ export default function SettingsPage() {
 }
 
 function TenantSettings() {
+  const t = useTranslations();
   const { data: tenant, isLoading } = trpc.settings.getTenant.useQuery();
 
   if (isLoading) return <Skeleton className="h-48" />;
-  if (!tenant) return <p className="text-muted-foreground">Not logged in</p>;
+  if (!tenant) return <p className="text-muted-foreground">{t("settings.notLoggedIn")}</p>;
 
   return (
     <Card>
@@ -172,10 +173,11 @@ function TeamSettings() {
 }
 
 function BillingSettings() {
+  const t = useTranslations();
   const { data, isLoading } = trpc.billing.getCurrentPlan.useQuery();
 
   if (isLoading) return <Skeleton className="h-48" />;
-  if (!data) return <p className="text-muted-foreground">Not logged in</p>;
+  if (!data) return <p className="text-muted-foreground">{t("settings.notLoggedIn")}</p>;
 
   return (
     <div className="flex flex-col gap-4">

@@ -1,22 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send, Mail, MessageSquare, Plus, Play, Pause } from "lucide-react";
+import { Send, Mail, MessageSquare, Plus, Play, Pause, BarChart3 } from "lucide-react";
+import { toast } from "sonner";
 import { TemplateEditor } from "./template-editor";
 import { CampaignCreateForm } from "./campaign-create-form";
 import { trpc } from "@/lib/trpc/client";
 
 export function OutreachView() {
   const t = useTranslations();
+  const searchParams = useSearchParams();
+  const creatorId = searchParams.get("creatorId");
+  const creatorName = searchParams.get("creatorName");
   const [showTemplateEditor, setShowTemplateEditor] = useState(false);
   const [showCampaignForm, setShowCampaignForm] = useState(false);
+  const [expandedStatsId, setExpandedStatsId] = useState<string | null>(null);
   const utils = trpc.useUtils();
+
+  useEffect(() => {
+    if (creatorId) {
+      setShowCampaignForm(true);
+    }
+  }, [creatorId]);
 
   const { data: campaigns, isLoading: campaignsLoading } =
     trpc.outreach.listCampaigns.useQuery();
@@ -24,10 +36,10 @@ export function OutreachView() {
 
   const startCampaign = trpc.outreach.startCampaign.useMutation({
     onSuccess: (result) => {
-      alert(`Campaign started! ${result.queued} messages queued.`);
+      toast.success(`Campaign started! ${result.queued} messages queued.`);
     },
     onError: (err) => {
-      alert(`Failed to start: ${err.message}`);
+      toast.error(`Failed to start: ${err.message}`);
     },
   });
 
@@ -36,19 +48,19 @@ export function OutreachView() {
   return (
     <Tabs defaultValue="campaigns" className="flex flex-col gap-4">
       <TabsList className="w-fit">
-        <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+        <TabsTrigger value="campaigns">{t("outreach.campaigns")}</TabsTrigger>
         <TabsTrigger value="templates">{t("outreach.templates")}</TabsTrigger>
-        <TabsTrigger value="stats">Stats</TabsTrigger>
+        <TabsTrigger value="stats">{t("outreach.statsTab")}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="campaigns" className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <p className="text-muted-foreground">
-            Create and manage outreach campaigns to connect with creators.
+            {t("outreach.campaignDescription")}
           </p>
           <Button onClick={() => setShowCampaignForm(!showCampaignForm)}>
             <Plus className="mr-2 h-4 w-4" />
-            New Campaign
+            {t("outreach.newCampaign")}
           </Button>
         </div>
 
@@ -56,6 +68,8 @@ export function OutreachView() {
           <CampaignCreateForm
             onClose={() => setShowCampaignForm(false)}
             onCreated={() => utils.outreach.listCampaigns.invalidate()}
+            creatorId={creatorId ?? undefined}
+            creatorName={creatorName ?? undefined}
           />
         )}
 
@@ -105,7 +119,7 @@ export function OutreachView() {
                         disabled={startCampaign.isPending}
                       >
                         <Play className="mr-1 h-3 w-3" />
-                        Start
+                        {t("outreach.start")}
                       </Button>
                     )}
                     {camp.status === "running" && (
@@ -116,10 +130,27 @@ export function OutreachView() {
                         disabled={pauseCampaign.isPending}
                       >
                         <Pause className="mr-1 h-3 w-3" />
-                        Pause
+                        {t("outreach.pause")}
+                      </Button>
+                    )}
+                    {(camp.status === "completed" || camp.status === "paused") && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          setExpandedStatsId(
+                            expandedStatsId === camp.id ? null : camp.id
+                          )
+                        }
+                      >
+                        <BarChart3 className="mr-1 h-3 w-3" />
+                        {t("outreach.viewResults")}
                       </Button>
                     )}
                   </div>
+                  {expandedStatsId === camp.id && (
+                    <CampaignStatsInline campaignId={camp.id} />
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -145,10 +176,10 @@ export function OutreachView() {
 
       <TabsContent value="stats">
         <div className="grid gap-4 md:grid-cols-4">
-          <StatCard label="Total Sent" value={String(Number(stats?.total ?? 0))} />
-          <StatCard label="Delivered" value={String(Number(stats?.delivered ?? 0))} />
-          <StatCard label="Opened" value={String(Number(stats?.opened ?? 0))} />
-          <StatCard label="Replied" value={String(Number(stats?.replied ?? 0))} />
+          <StatCard label={t("outreach.totalSent")} value={String(Number(stats?.total ?? 0))} />
+          <StatCard label={t("outreach.delivered")} value={String(Number(stats?.delivered ?? 0))} />
+          <StatCard label={t("outreach.opened")} value={String(Number(stats?.opened ?? 0))} />
+          <StatCard label={t("outreach.replied")} value={String(Number(stats?.replied ?? 0))} />
         </div>
       </TabsContent>
     </Tabs>
@@ -186,6 +217,33 @@ function TemplateList() {
             </p>
           </CardContent>
         </Card>
+      ))}
+    </div>
+  );
+}
+
+function CampaignStatsInline({ campaignId }: { campaignId: string }) {
+  const { data, isLoading } = trpc.outreach.getCampaignStats.useQuery({
+    campaignId,
+  });
+
+  if (isLoading) return <Skeleton className="h-8 mt-2" />;
+  if (!data) return null;
+
+  const items = [
+    { label: "Sent", value: data.sent, className: "bg-muted text-muted-foreground" },
+    { label: "Delivered", value: data.delivered, className: "bg-green-600/20 text-green-400" },
+    { label: "Opened", value: data.opened, className: "bg-blue-600/20 text-blue-400" },
+    { label: "Replied", value: data.replied, className: "bg-purple-600/20 text-purple-400" },
+    { label: "Failed", value: data.failed, className: "bg-red-600/20 text-red-400" },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border">
+      {items.map((item) => (
+        <Badge key={item.label} className={item.className}>
+          {item.label}: {Number(item.value)}
+        </Badge>
       ))}
     </div>
   );

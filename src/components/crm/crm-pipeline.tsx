@@ -5,9 +5,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MessageSquare, MoreHorizontal } from "lucide-react";
+import { MessageSquare, MoreHorizontal, User, ArrowRightLeft, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { formatCompactNumber, formatCurrency } from "@/lib/i18n/config";
 import { trpc } from "@/lib/trpc/client";
 
@@ -30,9 +41,18 @@ const STAGE_COLORS: Record<string, string> = {
 export function CrmPipeline() {
   const t = useTranslations("crm");
   const locale = useLocale();
+  const router = useRouter();
 
-  // Fetch all CRM relationships (no stage filter → get all)
+  const utils = trpc.useUtils();
   const { data, isLoading, error } = trpc.crm.listByStage.useQuery({});
+
+  const updateStageMutation = trpc.crm.updateStage.useMutation({
+    onSuccess: () => utils.crm.listByStage.invalidate(),
+  });
+
+  const deleteMutation = trpc.crm.delete.useMutation({
+    onSuccess: () => utils.crm.listByStage.invalidate(),
+  });
 
   if (error) {
     return (
@@ -89,13 +109,44 @@ export function CrmPipeline() {
                               <p className="font-medium truncate">
                                 {creator.displayName ?? creator.username}
                               </p>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                              >
-                                <MoreHorizontal className="h-3 w-3" />
-                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-6 w-6">
+                                    <MoreHorizontal className="h-3 w-3" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => router.push(`/${locale}/creators/${creator.id}`)}>
+                                    <User className="mr-2 h-4 w-4" />
+                                    프로필 보기
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSub>
+                                    <DropdownMenuSubTrigger>
+                                      <ArrowRightLeft className="mr-2 h-4 w-4" />
+                                      스테이지 변경
+                                    </DropdownMenuSubTrigger>
+                                    <DropdownMenuSubContent>
+                                      {STAGES.map((s) => (
+                                        <DropdownMenuItem
+                                          key={s}
+                                          disabled={s === stage}
+                                          onClick={() => updateStageMutation.mutate({ relationshipId: relationship.id, stage: s })}
+                                        >
+                                          {t(`stages.${s}`)}
+                                        </DropdownMenuItem>
+                                      ))}
+                                    </DropdownMenuSubContent>
+                                  </DropdownMenuSub>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    className="text-destructive focus:text-destructive"
+                                    onClick={() => deleteMutation.mutate({ relationshipId: relationship.id })}
+                                  >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    삭제
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </div>
                             <p className="text-xs text-muted-foreground">
                               @{creator.username}
@@ -104,7 +155,7 @@ export function CrmPipeline() {
                             <div className="mt-2 flex gap-3 text-xs">
                               <span className="font-mono">
                                 {formatCompactNumber(creator.followers, locale)}{" "}
-                                followers
+                                {t("followers")}
                               </span>
                               <span className="font-mono">
                                 {formatCurrency(
@@ -134,7 +185,7 @@ export function CrmPipeline() {
                             {relationship.lastContactedAt && (
                               <p className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
                                 <MessageSquare className="h-3 w-3" />
-                                Last:{" "}
+                                {t("lastContacted")}{" "}
                                 {new Date(
                                   relationship.lastContactedAt
                                 ).toLocaleDateString(locale)}
@@ -148,7 +199,7 @@ export function CrmPipeline() {
 
                 {!isLoading && items.length === 0 && (
                   <div className="flex items-center justify-center rounded-md border border-dashed p-8 text-sm text-muted-foreground">
-                    No creators
+                    {t("noCreators")}
                   </div>
                 )}
               </div>

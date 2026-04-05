@@ -91,7 +91,7 @@ export default function CreatorDetailPage() {
                           : "bg-red-600/20 text-red-400"
                     }
                   >
-                    Trust: {creator.trustScore}
+                    {t("creators.trust")}: {creator.trustScore}
                   </Badge>
                 )}
               </div>
@@ -103,7 +103,7 @@ export default function CreatorDetailPage() {
                 <Button size="sm" asChild>
                   <Link href={`/outreach?creatorId=${creatorId}&creatorName=${encodeURIComponent(creator.displayName ?? creator.username)}`}>
                     <Send className="mr-2 h-4 w-4" />
-                    Send Outreach
+                    {t("creators.sendOutreach")}
                   </Link>
                 </Button>
                 <Button size="sm" variant="outline" asChild>
@@ -123,8 +123,8 @@ export default function CreatorDetailPage() {
         <StatCard label={t("creators.followers")} value={formatCompactNumber(creator.followers, locale)} />
         <StatCard label={t("creators.engagement")} value={`${creator.engagementRate ?? 0}%`} />
         <StatCard label={t("creators.gmv")} value={formatCurrency(Number(creator.gmv ?? 0), locale)} />
-        <StatCard label="Avg Views" value={formatCompactNumber(creator.avgViews ?? 0, locale)} />
-        <StatCard label="Total Videos" value={String(creator.totalVideos ?? 0)} />
+        <StatCard label={t("creators.avgViews")} value={formatCompactNumber(creator.avgViews ?? 0, locale)} />
+        <StatCard label={t("creators.totalVideos")} value={String(creator.totalVideos ?? 0)} />
       </div>
 
       {/* Details */}
@@ -133,22 +133,22 @@ export default function CreatorDetailPage() {
         {demographics && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Audience Demographics</CardTitle>
+              <CardTitle className="text-base">{t("creators.audienceDemographics")}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               {demographics.genderSplit && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Gender</p>
+                  <p className="text-sm text-muted-foreground mb-2">{t("creators.gender")}</p>
                   <div className="flex gap-4 text-sm">
-                    <span>Male: {demographics.genderSplit.male}%</span>
-                    <span>Female: {demographics.genderSplit.female}%</span>
-                    <span>Other: {demographics.genderSplit.other}%</span>
+                    <span>{t("creators.male")}: {demographics.genderSplit.male}%</span>
+                    <span>{t("creators.female")}: {demographics.genderSplit.female}%</span>
+                    <span>{t("creators.other")}: {demographics.genderSplit.other}%</span>
                   </div>
                 </div>
               )}
               {demographics.ageGroups && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Age Groups</p>
+                  <p className="text-sm text-muted-foreground mb-2">{t("creators.ageGroups")}</p>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(demographics.ageGroups).map(([range, pct]) => (
                       <Badge key={range} variant="secondary">
@@ -160,7 +160,7 @@ export default function CreatorDetailPage() {
               )}
               {demographics.topCountries && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Top Countries</p>
+                  <p className="text-sm text-muted-foreground mb-2">{t("creators.topCountries")}</p>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(demographics.topCountries).map(([country, pct]) => (
                       <Badge key={country} variant="outline">
@@ -177,7 +177,7 @@ export default function CreatorDetailPage() {
         {/* Content Styles & Info */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Creator Info</CardTitle>
+            <CardTitle className="text-base">{t("creators.creatorInfo")}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 text-sm">
             <div className="flex justify-between">
@@ -191,17 +191,17 @@ export default function CreatorDetailPage() {
             </div>
             <Separator />
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Language</span>
+              <span className="text-muted-foreground">{t("creators.language")}</span>
               <span>{creator.language ?? "—"}</span>
             </div>
             <Separator />
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Email</span>
+              <span className="text-muted-foreground">{t("creators.email")}</span>
               <span>{creator.email ?? "—"}</span>
             </div>
             <Separator />
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Content Styles</span>
+              <span className="text-muted-foreground">{t("creators.contentStyles")}</span>
               <div className="flex gap-1">
                 {((creator.contentStyles as string[]) ?? []).map((style) => (
                   <Badge key={style} variant="outline" className="text-xs">
@@ -212,7 +212,7 @@ export default function CreatorDetailPage() {
             </div>
             <Separator />
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Last Active</span>
+              <span className="text-muted-foreground">{t("creators.lastActive")}</span>
               <span>
                 {creator.lastActiveAt
                   ? new Date(creator.lastActiveAt).toLocaleDateString(locale)

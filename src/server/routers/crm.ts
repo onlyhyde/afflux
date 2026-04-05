@@ -13,7 +13,8 @@ export const crmRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const tenantId = ctx.tenantId!;
+      const conditions = [eq(creatorRelationships.tenantId, tenantId)];
       if (input.stage) {
         conditions.push(eq(creatorRelationships.stage, input.stage));
       }
@@ -25,7 +26,7 @@ export const crmRouter = createTRPCRouter({
         })
         .from(creatorRelationships)
         .innerJoin(creators, eq(creators.id, creatorRelationships.creatorId))
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .where(and(...conditions))
         .orderBy(desc(creatorRelationships.updatedAt))
         .limit(100);
 
@@ -95,6 +96,16 @@ export const crmRouter = createTRPCRouter({
         .where(eq(creatorRelationships.id, input.relationshipId))
         .returning();
 
+      return result[0];
+    }),
+
+  delete: publicProcedure
+    .input(z.object({ relationshipId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db
+        .delete(creatorRelationships)
+        .where(eq(creatorRelationships.id, input.relationshipId))
+        .returning();
       return result[0];
     }),
 });

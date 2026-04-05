@@ -25,7 +25,7 @@ export const creatorListRouter = createTRPCRouter({
       const result = await ctx.db
         .insert(creatorLists)
         .values({
-          tenantId: ctx.tenantId ?? "00000000-0000-0000-0000-000000000000",
+          tenantId: ctx.tenantId!,
           ...input,
         })
         .returning();
@@ -36,7 +36,7 @@ export const creatorListRouter = createTRPCRouter({
     .input(z.object({ listId: z.string().uuid(), creatorId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(creatorListMembers).values({
-        tenantId: ctx.tenantId ?? "00000000-0000-0000-0000-000000000000",
+        tenantId: ctx.tenantId!,
         listId: input.listId,
         creatorId: input.creatorId,
       });

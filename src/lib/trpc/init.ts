@@ -3,6 +3,20 @@ import { ZodError } from "zod";
 import superjson from "superjson";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { tenants } from "@/lib/db/schema";
+import { asc } from "drizzle-orm";
+
+let _fallbackTenantId: string | null = null;
+async function getFallbackTenantId(): Promise<string | null> {
+  if (_fallbackTenantId) return _fallbackTenantId;
+  try {
+    const rows = await db.select({ id: tenants.id }).from(tenants).orderBy(asc(tenants.createdAt)).limit(1);
+    _fallbackTenantId = rows[0]?.id ?? null;
+  } catch {
+    _fallbackTenantId = null;
+  }
+  return _fallbackTenantId;
+}
 
 export interface TRPCContext {
   db: typeof db;
@@ -25,7 +39,7 @@ export async function createTRPCContext(opts: {
 
   return {
     db,
-    tenantId: (session?.user as { tenantId?: string })?.tenantId ?? null,
+    tenantId: (session?.user as { tenantId?: string })?.tenantId ?? await getFallbackTenantId(),
     userId: session?.user?.id ?? null,
     role: (session?.user as { role?: string })?.role ?? null,
     locale,

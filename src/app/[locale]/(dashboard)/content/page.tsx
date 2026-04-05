@@ -23,15 +23,15 @@ export default function ContentPage() {
         <TabsList>
           <TabsTrigger value="videos">
             <FileVideo className="mr-2 h-4 w-4" />
-            Videos
+            {t("content.videos")}
           </TabsTrigger>
           <TabsTrigger value="spark-codes">
             <Zap className="mr-2 h-4 w-4" />
-            Spark Codes
+            {t("content.sparkCodes")}
           </TabsTrigger>
           <TabsTrigger value="ai-scripts">
             <Sparkles className="mr-2 h-4 w-4" />
-            AI Scripts
+            {t("content.aiScripts")}
           </TabsTrigger>
         </TabsList>
 
@@ -50,40 +50,97 @@ export default function ContentPage() {
 }
 
 function VideosTab() {
+  const t = useTranslations();
   const locale = useLocale();
   const { data: gmv, isLoading } = trpc.analytics.getGmvSummary.useQuery({});
+  const { data: videos, isLoading: videosLoading } = trpc.content.list.useQuery({});
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-muted-foreground">Track creator content performance and engagement.</p>
+      <p className="text-muted-foreground">{t("content.trackDescription")}</p>
       {isLoading ? (
         <Skeleton className="h-32" />
       ) : (
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total Content</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">{t("content.totalContent")}</CardTitle>
             </CardHeader>
             <CardContent><div className="text-2xl font-bold font-mono">{Number(gmv?.contentCount ?? 0)}</div></CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total Views</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">{t("content.totalViews")}</CardTitle>
             </CardHeader>
             <CardContent><div className="text-2xl font-bold font-mono">{formatCompactNumber(Number(gmv?.totalViews ?? 0), locale)}</div></CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Conversions</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">{t("content.conversions")}</CardTitle>
             </CardHeader>
             <CardContent><div className="text-2xl font-bold font-mono">{formatCompactNumber(Number(gmv?.totalConversions ?? 0), locale)}</div></CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total GMV</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">{t("content.totalGmv")}</CardTitle>
             </CardHeader>
             <CardContent><div className="text-2xl font-bold font-mono">{formatCurrency(Number(gmv?.totalGmv ?? 0), locale)}</div></CardContent>
           </Card>
+        </div>
+      )}
+
+      {videosLoading ? (
+        <Skeleton className="h-64" />
+      ) : (videos ?? []).length === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground">
+            No video content yet.
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="rounded-md border overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b bg-muted/50">
+                <th className="px-4 py-3 text-left font-medium">{t("content.title")}</th>
+                <th className="px-4 py-3 text-left font-medium">{t("content.creator")}</th>
+                <th className="px-4 py-3 text-right font-medium">{t("content.views")}</th>
+                <th className="px-4 py-3 text-right font-medium">{t("content.likes")}</th>
+                <th className="px-4 py-3 text-right font-medium">{t("content.comments")}</th>
+                <th className="px-4 py-3 text-right font-medium">{t("content.conversions")}</th>
+                <th className="px-4 py-3 text-right font-medium">{t("content.gmv")}</th>
+                <th className="px-4 py-3 text-right font-medium">{t("content.published")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(videos ?? []).map((v) => (
+                <tr key={v.id} className="border-b hover:bg-accent/50 transition-colors">
+                  <td className="px-4 py-3 font-medium">{v.title}</td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {v.creatorDisplayName ?? v.creatorUsername ?? "-"}
+                  </td>
+                  <td className="px-4 py-3 text-right font-mono">
+                    {formatCompactNumber(Number(v.views ?? 0), locale)}
+                  </td>
+                  <td className="px-4 py-3 text-right font-mono">
+                    {formatCompactNumber(Number(v.likes ?? 0), locale)}
+                  </td>
+                  <td className="px-4 py-3 text-right font-mono">
+                    {formatCompactNumber(Number(v.comments ?? 0), locale)}
+                  </td>
+                  <td className="px-4 py-3 text-right font-mono">
+                    {Number(v.conversions ?? 0)}
+                  </td>
+                  <td className="px-4 py-3 text-right font-mono">
+                    {formatCurrency(Number(v.gmv ?? 0), locale)}
+                  </td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">
+                    {v.publishedAt ? new Date(v.publishedAt).toLocaleDateString(locale) : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
@@ -91,15 +148,65 @@ function VideosTab() {
 }
 
 function SparkCodesTab() {
+  const locale = useLocale();
+  const { data: sparkCodes, isLoading } = trpc.content.listSparkCodes.useQuery({});
+
+  const statusBadgeVariant: Record<string, string> = {
+    requested: "bg-yellow-500/15 text-yellow-500 border-yellow-500/20",
+    received: "bg-blue-500/15 text-blue-500 border-blue-500/20",
+    active: "bg-green-500/15 text-green-500 border-green-500/20",
+    expired: "bg-gray-500/15 text-gray-500 border-gray-500/20",
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <p className="text-muted-foreground">Manage Spark Ads authorization codes from creators.</p>
-      <Card>
-        <CardContent className="py-12 text-center text-muted-foreground">
-          Spark Code management connected to TikTok Ads Manager.
-          <br />Codes are auto-collected when creators authorize.
-        </CardContent>
-      </Card>
+
+      {isLoading ? (
+        <Skeleton className="h-64" />
+      ) : (sparkCodes ?? []).length === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground">
+            No spark codes yet. Codes are auto-collected when creators authorize.
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="rounded-md border overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b bg-muted/50">
+                <th className="px-4 py-3 text-left font-medium">Code</th>
+                <th className="px-4 py-3 text-left font-medium">Creator</th>
+                <th className="px-4 py-3 text-left font-medium">Status</th>
+                <th className="px-4 py-3 text-right font-medium">Expires At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(sparkCodes ?? []).map((sc) => (
+                <tr key={sc.id} className="border-b hover:bg-accent/50 transition-colors">
+                  <td className="px-4 py-3 font-mono font-medium">{sc.code}</td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {sc.creatorDisplayName ?? sc.creatorUsername ?? "-"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge
+                      variant="outline"
+                      className={statusBadgeVariant[sc.status] ?? ""}
+                    >
+                      {sc.status}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">
+                    {sc.expiresAt
+                      ? new Date(sc.expiresAt).toLocaleDateString(locale)
+                      : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

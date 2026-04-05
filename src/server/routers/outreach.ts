@@ -52,7 +52,7 @@ export const outreachRouter = createTRPCRouter({
       const result = await ctx.db
         .insert(outreachTemplates)
         .values({
-          tenantId: "00000000-0000-0000-0000-000000000000", // TODO: from auth context
+          tenantId: ctx.tenantId!,
           ...input,
         })
         .returning();
@@ -73,7 +73,7 @@ export const outreachRouter = createTRPCRouter({
       const result = await ctx.db
         .insert(outreachCampaigns)
         .values({
-          tenantId: "00000000-0000-0000-0000-000000000000", // TODO: from auth context
+          tenantId: ctx.tenantId!,
           ...input,
         })
         .returning();
@@ -106,6 +106,24 @@ export const outreachRouter = createTRPCRouter({
       return stats[0] ?? { total: 0, sent: 0, delivered: 0, opened: 0, replied: 0, failed: 0 };
     }),
 
+  // ── Per-Campaign Stats ───────────────────────────
+  getCampaignStats: publicProcedure
+    .input(z.object({ campaignId: z.string().uuid() }))
+    .query(async ({ ctx, input }) => {
+      const stats = await ctx.db
+        .select({
+          sent: sql<number>`count(*) filter (where ${outreachMessages.status} = 'sent')`,
+          delivered: sql<number>`count(*) filter (where ${outreachMessages.status} = 'delivered')`,
+          opened: sql<number>`count(*) filter (where ${outreachMessages.status} = 'opened')`,
+          replied: sql<number>`count(*) filter (where ${outreachMessages.status} = 'replied')`,
+          failed: sql<number>`count(*) filter (where ${outreachMessages.status} = 'failed')`,
+        })
+        .from(outreachMessages)
+        .where(eq(outreachMessages.campaignId, input.campaignId));
+
+      return stats[0] ?? { sent: 0, delivered: 0, opened: 0, replied: 0, failed: 0 };
+    }),
+
   // ── Campaign Execution ──────────────────────────
 
   startCampaign: publicProcedure
@@ -115,7 +133,7 @@ export const outreachRouter = createTRPCRouter({
       const { getPlanLimits } = await import("@/server/services/plan-limits");
 
       // Get tenant plan limits
-      const tenantId = ctx.tenantId ?? "00000000-0000-0000-0000-000000000000";
+      const tenantId = ctx.tenantId!;
       const limits = getPlanLimits("growth"); // TODO: get from actual tenant plan
 
       return executeCampaign({

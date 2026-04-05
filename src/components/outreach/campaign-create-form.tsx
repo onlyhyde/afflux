@@ -18,11 +18,13 @@ import { trpc } from "@/lib/trpc/client";
 interface CampaignCreateFormProps {
   onClose: () => void;
   onCreated: () => void;
+  creatorId?: string;
+  creatorName?: string;
 }
 
-export function CampaignCreateForm({ onClose, onCreated }: CampaignCreateFormProps) {
+export function CampaignCreateForm({ onClose, onCreated, creatorId, creatorName }: CampaignCreateFormProps) {
   const t = useTranslations();
-  const [name, setName] = useState("");
+  const [name, setName] = useState(creatorName ? `Outreach to ${creatorName}` : "");
   const [channel, setChannel] = useState("tiktok_dm");
 
   const { data: templates } = trpc.outreach.listTemplates.useQuery({

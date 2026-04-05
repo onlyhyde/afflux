@@ -109,6 +109,23 @@ function generateCreator(i: number) {
 async function main() {
   console.log("🌱 Seeding development data...\n");
 
+  // 0. Clean existing seed data (reverse dependency order)
+  console.log("  Cleaning existing data...");
+  await db.delete(schema.sparkCodes);
+  await db.delete(schema.contents);
+  await db.delete(schema.outreachMessages);
+  await db.delete(schema.outreachCampaigns);
+  await db.delete(schema.outreachTemplates);
+  await db.delete(schema.creatorRelationships);
+  await db.delete(schema.creatorListMembers);
+  await db.delete(schema.creatorLists);
+  await db.delete(schema.creators);
+  await db.delete(schema.products);
+  await db.delete(schema.shops);
+  await db.delete(schema.users);
+  await db.delete(schema.tenants);
+  console.log("    ✓ cleaned");
+
   // 1. Tenants
   console.log("  Tenants...");
   const tenantRows = await db
@@ -141,7 +158,7 @@ async function main() {
 
   // 3. Shops
   console.log("  Shops...");
-  const shopValues = tenantRows.slice(1).flatMap((t, i) => [
+  const shopValues = tenantRows.flatMap((t, i) => [
     { tenantId: t.id, name: `Shop ${i * 2 + 1}`, category: randomPick(CATEGORIES), tiktokShopId: `ts_${i * 2 + 1}` },
     { tenantId: t.id, name: `Shop ${i * 2 + 2}`, category: randomPick(CATEGORIES), tiktokShopId: `ts_${i * 2 + 2}` },
   ]);
@@ -179,7 +196,7 @@ async function main() {
 
   // 6. Creator Lists
   console.log("  Creator lists...");
-  const listValues = tenantRows.slice(1).flatMap((t) =>
+  const listValues = tenantRows.flatMap((t) =>
     Array.from({ length: 5 }, (_, i) => ({
       tenantId: t.id,
       name: `${randomPick(CATEGORIES)} Creators #${i + 1}`,
@@ -202,7 +219,7 @@ async function main() {
 
   // 7. Creator Relationships (CRM)
   console.log("  CRM relationships...");
-  const relValues = tenantRows.slice(1).flatMap((t) => {
+  const relValues = tenantRows.flatMap((t) => {
     const selected = allCreators.slice(0, 50);
     return selected.map((c, i) => ({
       tenantId: t.id,
@@ -217,7 +234,7 @@ async function main() {
 
   // 8. Outreach Templates
   console.log("  Outreach templates...");
-  const templateValues = tenantRows.slice(1).flatMap((t) => [
+  const templateValues = tenantRows.flatMap((t) => [
     { tenantId: t.id, name: "Initial DM", locale: "en", channel: "tiktok_dm" as const, body: "Hi {{creator_name}}! We'd love to work with you on {{product_name}}. {{commission_rate}}% commission!" },
     { tenantId: t.id, name: "Initial DM", locale: "ko", channel: "tiktok_dm" as const, body: "안녕하세요 {{creator_name}}님! {{product_name}} 협업을 제안드립니다. {{commission_rate}}% 수수료!" },
     { tenantId: t.id, name: "Follow Up", locale: "en", channel: "email" as const, subject: "Partnership with {{brand_name}}", body: "Hi {{creator_name}},\n\nJust following up on our previous message..." },
@@ -228,7 +245,7 @@ async function main() {
 
   // 9. Outreach Campaigns
   console.log("  Campaigns + messages...");
-  const campaignValues = tenantRows.slice(1).flatMap((t) =>
+  const campaignValues = tenantRows.flatMap((t) =>
     Array.from({ length: 5 }, (_, i) => ({
       tenantId: t.id,
       name: `${randomPick(CATEGORIES)} Campaign ${i + 1}`,
@@ -257,7 +274,7 @@ async function main() {
   // 11. Contents
   console.log("  Contents...");
   const contentValues = Array.from({ length: 200 }, (_, i) => ({
-    tenantId: randomPick(tenantRows.slice(1)).id,
+    tenantId: randomPick(tenantRows).id,
     creatorId: randomPick(allCreators).id,
     productId: randomPick(productRows).id,
     tiktokVideoId: `vid_${i}`,
@@ -276,7 +293,7 @@ async function main() {
   // 12. Spark Codes
   console.log("  Spark codes...");
   const sparkValues = Array.from({ length: 50 }, (_, i) => ({
-    tenantId: randomPick(tenantRows.slice(1)).id,
+    tenantId: randomPick(tenantRows).id,
     creatorId: randomPick(allCreators).id,
     code: crypto.randomUUID().slice(0, 12),
     status: randomPick(["requested", "received", "active", "expired"] as const),

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { UserPlus, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { formatCompactNumber, formatCurrency } from "@/lib/i18n/config";
 import { trpc } from "@/lib/trpc/client";
 import { Link } from "@/lib/i18n/routing";
@@ -27,11 +28,33 @@ interface CreatorTableProps {
     minFollowers: string;
     sortBy: string;
   };
+  page?: number;
+  onPageChange?: (page: number) => void;
 }
 
-export function CreatorTable({ filters }: CreatorTableProps) {
+export function CreatorTable({ filters, page: controlledPage, onPageChange }: CreatorTableProps) {
   const t = useTranslations();
   const locale = useLocale();
+  const [internalPage, setInternalPage] = useState(1);
+
+  const currentPage = controlledPage ?? internalPage;
+  const setPage = (p: number) => {
+    if (onPageChange) {
+      onPageChange(p);
+    } else {
+      setInternalPage(p);
+    }
+  };
+
+  // Reset to page 1 when filters change
+  const filterKey = JSON.stringify(filters);
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
+    if (currentPage !== 1) {
+      setPage(1);
+    }
+  }
 
   const { data, isLoading, error } = trpc.creator.list.useQuery({
     search: filters.search || undefined,
@@ -42,7 +65,7 @@ export function CreatorTable({ filters }: CreatorTableProps) {
       : undefined,
     sortBy: (filters.sortBy as "followers" | "engagement_rate" | "gmv" | "created_at") || "followers",
     sortOrder: "desc",
-    page: 1,
+    page: currentPage,
     pageSize: 20,
   });
 
@@ -79,13 +102,13 @@ export function CreatorTable({ filters }: CreatorTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[300px]">Creator</TableHead>
+            <TableHead className="w-[300px]">{t("creators.creator")}</TableHead>
             <TableHead>{t("creators.category")}</TableHead>
             <TableHead className="text-right">{t("creators.followers")}</TableHead>
             <TableHead className="text-right">{t("creators.engagement")}</TableHead>
             <TableHead className="text-right">{t("creators.gmv")}</TableHead>
-            <TableHead className="text-right">Trust</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            <TableHead className="text-right">{t("creators.trust")}</TableHead>
+            <TableHead className="w-[100px]">{t("creators.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -149,8 +172,31 @@ export function CreatorTable({ filters }: CreatorTableProps) {
       {data && data.totalPages > 1 && (
         <div className="flex items-center justify-between border-t px-4 py-3 text-sm text-muted-foreground">
           <span>
-            {data.total} creators, page {data.page}/{data.totalPages}
+            {data.total} {t("creators.creatorsLabel")}, {t("creators.page")} {data.page}/{data.totalPages}
           </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(currentPage - 1)}
+              disabled={currentPage <= 1}
+            >
+              <ChevronLeft className="mr-1 h-4 w-4" />
+              {t("common.previous")}
+            </Button>
+            <span className="min-w-[3rem] text-center font-medium">
+              {currentPage}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(currentPage + 1)}
+              disabled={currentPage >= data.totalPages}
+            >
+              {t("common.next")}
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
     </div>

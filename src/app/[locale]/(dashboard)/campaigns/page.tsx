@@ -23,15 +23,15 @@ export default function CampaignsPage() {
         <TabsList>
           <TabsTrigger value="samples">
             <Package className="mr-2 h-4 w-4" />
-            Samples
+            {t("campaigns.samples")}
           </TabsTrigger>
           <TabsTrigger value="contests">
             <Trophy className="mr-2 h-4 w-4" />
-            Contests
+            {t("campaigns.contests")}
           </TabsTrigger>
           <TabsTrigger value="competitors">
             <Eye className="mr-2 h-4 w-4" />
-            Competitors
+            {t("campaigns.competitors")}
           </TabsTrigger>
         </TabsList>
 
@@ -50,17 +50,18 @@ export default function CampaignsPage() {
 }
 
 function SamplesTab() {
+  const t = useTranslations();
   const { data, isLoading } = trpc.campaign.listSamples.useQuery({ page: 1, pageSize: 20 });
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <p className="text-muted-foreground">Manage product sample requests from creators.</p>
+        <p className="text-muted-foreground">{t("campaigns.samplesDescription")}</p>
       </div>
       {isLoading ? (
         <div className="flex flex-col gap-2">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
       ) : (data ?? []).length === 0 ? (
-        <Card><CardContent className="py-12 text-center text-muted-foreground">No sample requests yet</CardContent></Card>
+        <Card><CardContent className="py-12 text-center text-muted-foreground">{t("campaigns.noSamples")}</CardContent></Card>
       ) : (
         <div className="flex flex-col gap-3">
           {(data ?? []).map((sample) => (
@@ -86,7 +87,7 @@ function SamplesTab() {
 }
 
 function ContestsTab() {
-  const t = useTranslations("common");
+  const t = useTranslations();
   const { data, isLoading } = trpc.campaign.listContests.useQuery({ page: 1, pageSize: 10 });
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
@@ -105,7 +106,7 @@ function ContestsTab() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <p className="text-muted-foreground">Run creator contests to boost engagement.</p>
+        <p className="text-muted-foreground">{t("campaigns.contestsDescription")}</p>
         <Button onClick={() => setShowForm(!showForm)}><Plus className="mr-2 h-4 w-4" />New Contest</Button>
       </div>
 
@@ -127,7 +128,7 @@ function ContestsTab() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowForm(false)}>{t("cancel")}</Button>
+              <Button variant="outline" onClick={() => setShowForm(false)}>{t("common.cancel")}</Button>
               <Button
                 onClick={() => createContest.mutate({
                   name,
@@ -137,7 +138,7 @@ function ContestsTab() {
                 })}
                 disabled={!name || !startDate || !endDate || createContest.isPending}
               >
-                {createContest.isPending ? t("loading") : t("create")}
+                {createContest.isPending ? t("common.loading") : t("common.create")}
               </Button>
             </div>
           </CardContent>
@@ -146,7 +147,7 @@ function ContestsTab() {
       {isLoading ? (
         <Skeleton className="h-32" />
       ) : (data ?? []).length === 0 ? (
-        <Card><CardContent className="py-12 text-center text-muted-foreground">No contests created yet</CardContent></Card>
+        <Card><CardContent className="py-12 text-center text-muted-foreground">{t("campaigns.noContests")}</CardContent></Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {(data ?? []).map((contest) => (
@@ -171,7 +172,7 @@ function ContestsTab() {
 }
 
 function CompetitorsTab() {
-  const t = useTranslations("common");
+  const t = useTranslations();
   const { data, isLoading } = trpc.campaign.listCompetitors.useQuery();
   const [showForm, setShowForm] = useState(false);
   const [compName, setCompName] = useState("");
@@ -192,7 +193,7 @@ function CompetitorsTab() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <p className="text-muted-foreground">Monitor competitor brands and their creator partnerships.</p>
+        <p className="text-muted-foreground">{t("campaigns.competitorsDescription")}</p>
         <Button onClick={() => setShowForm(!showForm)}><Plus className="mr-2 h-4 w-4" />Add Competitor</Button>
       </div>
 
@@ -214,12 +215,12 @@ function CompetitorsTab() {
               <Input value={compUrl} onChange={(e) => setCompUrl(e.target.value)} placeholder="https://tiktok.com/shop/brand" />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowForm(false)}>{t("cancel")}</Button>
+              <Button variant="outline" onClick={() => setShowForm(false)}>{t("common.cancel")}</Button>
               <Button
                 onClick={() => addCompetitor.mutate({ name: compName, tiktokShopUrl: compUrl || undefined, category: compCategory || undefined })}
                 disabled={!compName || addCompetitor.isPending}
               >
-                {addCompetitor.isPending ? t("loading") : t("create")}
+                {addCompetitor.isPending ? t("common.loading") : t("common.create")}
               </Button>
             </div>
           </CardContent>
@@ -228,7 +229,7 @@ function CompetitorsTab() {
       {isLoading ? (
         <Skeleton className="h-32" />
       ) : (data ?? []).length === 0 ? (
-        <Card><CardContent className="py-12 text-center text-muted-foreground">No competitors tracked yet</CardContent></Card>
+        <Card><CardContent className="py-12 text-center text-muted-foreground">{t("campaigns.noCompetitors")}</CardContent></Card>
       ) : (
         <div className="flex flex-col gap-3">
           {(data ?? []).map((brand) => (
