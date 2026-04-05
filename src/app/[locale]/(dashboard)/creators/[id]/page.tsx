@@ -100,13 +100,17 @@ export default function CreatorDetailPage() {
                 <p className="mt-2 text-sm max-w-2xl">{creator.bio}</p>
               )}
               <div className="mt-4 flex gap-2">
-                <Button size="sm">
-                  <Send className="mr-2 h-4 w-4" />
-                  Send Outreach
+                <Button size="sm" asChild>
+                  <Link href={`/outreach?creatorId=${creatorId}&creatorName=${encodeURIComponent(creator.displayName ?? creator.username)}`}>
+                    <Send className="mr-2 h-4 w-4" />
+                    Send Outreach
+                  </Link>
                 </Button>
-                <Button size="sm" variant="outline">
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  {t("creators.addToList")}
+                <Button size="sm" variant="outline" asChild>
+                  <Link href="/creators">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    {t("creators.addToList")}
+                  </Link>
                 </Button>
               </div>
             </div>

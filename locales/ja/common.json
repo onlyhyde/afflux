@@ -91,5 +91,38 @@
     "confirm": "よろしいですか？",
     "yes": "はい",
     "no": "いいえ"
+  },
+  "onboarding": {
+    "shopTitle": "Tell us about your shop",
+    "shopDescription": "We'll use this to find the best creators for your brand.",
+    "shopName": "Shop Name",
+    "shopNamePlaceholder": "Your TikTok Shop name",
+    "productTitle": "Add your first product",
+    "productDescription": "Our AI will analyze this to recommend the best creators.",
+    "productName": "Product Name",
+    "productNamePlaceholder": "e.g., Vegan Glow Serum",
+    "price": "Price (USD)",
+    "strategyTitle": "Define your goals",
+    "strategyDescription": "We'll create a personalized playbook for your launch.",
+    "budget": "Monthly Budget",
+    "goal": "Primary Goal",
+    "goalGmv": "Maximize GMV",
+    "goalAwareness": "Brand Awareness",
+    "goalCreators": "Build Creator Network",
+    "goalContent": "Generate Content",
+    "generateStrategy": "Generate Strategy",
+    "completeTitle": "Your playbook is ready!",
+    "goToDashboard": "Go to Dashboard",
+    "checklist": {
+      "1": "Set up your TikTok Shop profile",
+      "2": "Add your first product with images and description",
+      "3": "Search for creators in your category",
+      "4": "Send your first 10 outreach messages",
+      "5": "Follow up with responsive creators",
+      "6": "Ship product samples to interested creators",
+      "7": "Monitor first content uploads",
+      "8": "Track GMV and optimize"
+    },
+    "next": "Next"
   }
 }
