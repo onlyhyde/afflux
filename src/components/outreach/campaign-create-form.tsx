@@ -118,7 +118,7 @@ export function CampaignCreateForm({ onClose, onCreated, creatorId, creatorName 
           <Button variant="outline" onClick={onClose}>
             {t("common.cancel")}
           </Button>
-          <Button onClick={handleCreate} disabled={!name || createCampaign.isPending}>
+          <Button onClick={handleCreate} disabled={!name || !templateId || !listId || createCampaign.isPending}>
             {createCampaign.isPending ? t("common.loading") : t("common.create")}
           </Button>
         </div>

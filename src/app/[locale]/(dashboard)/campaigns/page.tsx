@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trpc } from "@/lib/trpc/client";
 import { Package, Trophy, Eye, Plus } from "lucide-react";
+import { StatusBadge, EmptyState, SkeletonList } from "@/components/shared";
 
 export default function CampaignsPage() {
   const t = useTranslations();
@@ -59,9 +59,9 @@ function SamplesTab() {
         <p className="text-muted-foreground">{t("campaigns.samplesDescription")}</p>
       </div>
       {isLoading ? (
-        <div className="flex flex-col gap-2">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+        <SkeletonList count={3} />
       ) : (data ?? []).length === 0 ? (
-        <Card><CardContent className="py-12 text-center text-muted-foreground">{t("campaigns.noSamples")}</CardContent></Card>
+        <EmptyState message={t("campaigns.noSamples")} />
       ) : (
         <div className="flex flex-col gap-3">
           {(data ?? []).map((sample) => (
@@ -73,10 +73,7 @@ function SamplesTab() {
                     Product: {sample.productId?.slice(0, 8)} · Creator: {sample.creatorId.slice(0, 8)}
                   </p>
                 </div>
-                <Badge variant={
-                  sample.status === "approved" ? "default" :
-                  sample.status === "rejected" ? "destructive" : "secondary"
-                }>{sample.status}</Badge>
+                <StatusBadge status={sample.status} />
               </CardContent>
             </Card>
           ))}
@@ -147,7 +144,7 @@ function ContestsTab() {
       {isLoading ? (
         <Skeleton className="h-32" />
       ) : (data ?? []).length === 0 ? (
-        <Card><CardContent className="py-12 text-center text-muted-foreground">{t("campaigns.noContests")}</CardContent></Card>
+        <EmptyState message={t("campaigns.noContests")} />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {(data ?? []).map((contest) => (
@@ -155,7 +152,7 @@ function ContestsTab() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{contest.name}</CardTitle>
-                  <Badge>{contest.status}</Badge>
+                  <StatusBadge status={contest.status} />
                 </div>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
@@ -229,7 +226,7 @@ function CompetitorsTab() {
       {isLoading ? (
         <Skeleton className="h-32" />
       ) : (data ?? []).length === 0 ? (
-        <Card><CardContent className="py-12 text-center text-muted-foreground">{t("campaigns.noCompetitors")}</CardContent></Card>
+        <EmptyState message={t("campaigns.noCompetitors")} />
       ) : (
         <div className="flex flex-col gap-3">
           {(data ?? []).map((brand) => (
@@ -239,7 +236,7 @@ function CompetitorsTab() {
                   <p className="font-medium">{brand.name}</p>
                   <p className="text-sm text-muted-foreground">{brand.category} · {brand.tiktokShopUrl ?? "No URL"}</p>
                 </div>
-                <Badge variant="outline">{brand.isActive ? "Active" : "Inactive"}</Badge>
+                <StatusBadge status={brand.isActive ? "active" : "expired"} />
               </CardContent>
             </Card>
           ))}

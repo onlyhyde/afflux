@@ -6,16 +6,13 @@ import { auth } from "@/lib/auth";
 import { tenants } from "@/lib/db/schema";
 import { asc } from "drizzle-orm";
 
-let _fallbackTenantId: string | null = null;
 async function getFallbackTenantId(): Promise<string | null> {
-  if (_fallbackTenantId) return _fallbackTenantId;
   try {
     const rows = await db.select({ id: tenants.id }).from(tenants).orderBy(asc(tenants.createdAt)).limit(1);
-    _fallbackTenantId = rows[0]?.id ?? null;
+    return rows[0]?.id ?? null;
   } catch {
-    _fallbackTenantId = null;
+    return null;
   }
-  return _fallbackTenantId;
 }
 
 export interface TRPCContext {

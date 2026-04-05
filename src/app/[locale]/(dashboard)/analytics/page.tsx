@@ -1,11 +1,12 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc/client";
 import { formatCurrency, formatCompactNumber } from "@/lib/i18n/config";
+import { StatCard, SkeletonGrid, EmptyState } from "@/components/shared";
 
 export default function AnalyticsPage() {
   const t = useTranslations();
@@ -20,54 +21,16 @@ export default function AnalyticsPage() {
       <h1 className="text-3xl font-bold">{t("nav.analytics")}</h1>
 
       {/* GMV Summary */}
-      <div className="grid gap-4 md:grid-cols-4">
-        {gmvLoading ? (
-          Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28" />)
-        ) : (
-          <>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">{t("analytics.totalGmv")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold font-mono">
-                  {formatCurrency(Number(gmv?.totalGmv ?? 0), locale)}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">{t("analytics.totalViews")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold font-mono">
-                  {formatCompactNumber(Number(gmv?.totalViews ?? 0), locale)}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">{t("analytics.conversions")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold font-mono">
-                  {formatCompactNumber(Number(gmv?.totalConversions ?? 0), locale)}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">{t("analytics.contentCount")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold font-mono">
-                  {Number(gmv?.contentCount ?? 0)}
-                </div>
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </div>
+      {gmvLoading ? (
+        <SkeletonGrid count={4} />
+      ) : (
+        <div className="grid gap-4 md:grid-cols-4">
+          <StatCard title={t("analytics.totalGmv")} value={formatCurrency(Number(gmv?.totalGmv ?? 0), locale)} />
+          <StatCard title={t("analytics.totalViews")} value={formatCompactNumber(Number(gmv?.totalViews ?? 0), locale)} />
+          <StatCard title={t("analytics.conversions")} value={formatCompactNumber(Number(gmv?.totalConversions ?? 0), locale)} />
+          <StatCard title={t("analytics.contentCount")} value={String(Number(gmv?.contentCount ?? 0))} />
+        </div>
+      )}
 
       {/* Top Creators */}
       <Card>
@@ -81,6 +44,10 @@ export default function AnalyticsPage() {
                 <Skeleton key={i} className="h-12" />
               ))}
             </div>
+          ) : (topCreators ?? []).length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">
+              {t("common.noData")}
+            </p>
           ) : (
             <div className="flex flex-col gap-3">
               {(topCreators ?? []).map((creator, i) => (
@@ -111,11 +78,6 @@ export default function AnalyticsPage() {
                   </span>
                 </div>
               ))}
-              {(topCreators ?? []).length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                  {t("common.noData")}
-                </p>
-              )}
             </div>
           )}
         </CardContent>

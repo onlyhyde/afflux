@@ -4,15 +4,16 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send, Mail, MessageSquare, Plus, Play, Pause, BarChart3 } from "lucide-react";
+import { Plus, Play, Pause, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { TemplateEditor } from "./template-editor";
 import { CampaignCreateForm } from "./campaign-create-form";
 import { trpc } from "@/lib/trpc/client";
+import { StatCard, EmptyState, StatusBadge, SkeletonGrid } from "@/components/shared";
 
 export function OutreachView() {
   const t = useTranslations();
@@ -74,17 +75,9 @@ export function OutreachView() {
         )}
 
         {campaignsLoading ? (
-          <div className="grid gap-4 md:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="h-40" />
-            ))}
-          </div>
+          <SkeletonGrid count={3} height="h-40" columns={3} />
         ) : (campaigns ?? []).length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center text-muted-foreground">
-              No campaigns yet. Create your first outreach campaign.
-            </CardContent>
-          </Card>
+          <EmptyState message="No campaigns yet. Create your first outreach campaign." />
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {(campaigns ?? []).map((camp) => (
@@ -92,19 +85,7 @@ export function OutreachView() {
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base">{camp.name}</CardTitle>
-                    <Badge
-                      className={
-                        camp.status === "running"
-                          ? "bg-green-600/20 text-green-400"
-                          : camp.status === "completed"
-                            ? "bg-blue-600/20 text-blue-400"
-                            : camp.status === "paused"
-                              ? "bg-yellow-600/20 text-yellow-400"
-                              : "bg-muted text-muted-foreground"
-                      }
-                    >
-                      {camp.status}
-                    </Badge>
+                    <StatusBadge status={camp.status} />
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -176,10 +157,10 @@ export function OutreachView() {
 
       <TabsContent value="stats">
         <div className="grid gap-4 md:grid-cols-4">
-          <StatCard label={t("outreach.totalSent")} value={String(Number(stats?.total ?? 0))} />
-          <StatCard label={t("outreach.delivered")} value={String(Number(stats?.delivered ?? 0))} />
-          <StatCard label={t("outreach.opened")} value={String(Number(stats?.opened ?? 0))} />
-          <StatCard label={t("outreach.replied")} value={String(Number(stats?.replied ?? 0))} />
+          <StatCard title={t("outreach.totalSent")} value={String(Number(stats?.total ?? 0))} />
+          <StatCard title={t("outreach.delivered")} value={String(Number(stats?.delivered ?? 0))} />
+          <StatCard title={t("outreach.opened")} value={String(Number(stats?.opened ?? 0))} />
+          <StatCard title={t("outreach.replied")} value={String(Number(stats?.replied ?? 0))} />
         </div>
       </TabsContent>
     </Tabs>
@@ -191,13 +172,7 @@ function TemplateList() {
 
   if (isLoading) return <Skeleton className="h-32" />;
   if (!templates || templates.length === 0) {
-    return (
-      <Card>
-        <CardContent className="py-8 text-center text-muted-foreground">
-          No templates yet. Create your first template above.
-        </CardContent>
-      </Card>
-    );
+    return <EmptyState message="No templates yet. Create your first template above." />;
   }
 
   return (
@@ -246,20 +221,5 @@ function CampaignStatsInline({ campaignId }: { campaignId: string }) {
         </Badge>
       ))}
     </div>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {label}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold font-mono">{value}</div>
-      </CardContent>
-    </Card>
   );
 }

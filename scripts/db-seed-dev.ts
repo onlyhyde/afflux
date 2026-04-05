@@ -240,18 +240,22 @@ async function main() {
     { tenantId: t.id, name: "Follow Up", locale: "en", channel: "email" as const, subject: "Partnership with {{brand_name}}", body: "Hi {{creator_name}},\n\nJust following up on our previous message..." },
     { tenantId: t.id, name: "Collab Invite", locale: "en", channel: "tiktok_invite" as const, body: "Check out {{product_name}} - {{commission_rate}}% commission!" },
   ]);
-  await db.insert(schema.outreachTemplates).values(templateValues);
-  console.log(`    ✓ ${templateValues.length} templates`);
+  const templateRows = await db.insert(schema.outreachTemplates).values(templateValues).returning();
+  console.log(`    ✓ ${templateRows.length} templates`);
 
   // 9. Outreach Campaigns
   console.log("  Campaigns + messages...");
-  const campaignValues = tenantRows.flatMap((t) =>
-    Array.from({ length: 5 }, (_, i) => ({
+  const campaignValues = tenantRows.flatMap((t) => {
+    const tenantTemplates = templateRows.filter((tr) => tr.tenantId === t.id);
+    const tenantLists = listRows.filter((lr) => lr.tenantId === t.id);
+    return Array.from({ length: 5 }, (_, i) => ({
       tenantId: t.id,
       name: `${randomPick(CATEGORIES)} Campaign ${i + 1}`,
       status: randomPick(["draft", "running", "completed", "scheduled"] as const),
-    }))
-  );
+      templateId: tenantTemplates.length > 0 ? randomPick(tenantTemplates).id : null,
+      targetListId: tenantLists.length > 0 ? randomPick(tenantLists).id : null,
+    }));
+  });
   const campaignRows = await db.insert(schema.outreachCampaigns).values(campaignValues).returning();
 
   // 10. Outreach Messages (1000)

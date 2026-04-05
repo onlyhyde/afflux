@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { db } from "@/lib/db";
 import {
   outreachCampaigns,
@@ -70,9 +71,9 @@ export async function executeCampaign(params: {
     )
     .limit(1);
 
-  if (!campaign[0]) throw new Error("Campaign not found");
-  if (!campaign[0].targetListId) throw new Error("Campaign has no target list");
-  if (!campaign[0].templateId) throw new Error("Campaign has no template");
+  if (!campaign[0]) throw new TRPCError({ code: "NOT_FOUND", message: "Campaign not found" });
+  if (!campaign[0].targetListId) throw new TRPCError({ code: "BAD_REQUEST", message: "Campaign has no target list. Please edit the campaign and assign a creator list." });
+  if (!campaign[0].templateId) throw new TRPCError({ code: "BAD_REQUEST", message: "Campaign has no template. Please edit the campaign and assign a message template." });
 
   const camp = campaign[0];
 
@@ -83,7 +84,7 @@ export async function executeCampaign(params: {
     .where(eq(outreachTemplates.id, camp.templateId!))
     .limit(1);
 
-  if (!template[0]) throw new Error("Template not found");
+  if (!template[0]) throw new TRPCError({ code: "NOT_FOUND", message: "Template not found. The assigned template may have been deleted." });
   const tmpl = template[0];
 
   // 3. Load target creators

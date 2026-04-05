@@ -11,7 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc/client";
 import { formatCompactNumber, formatCurrency } from "@/lib/i18n/config";
 import { Link } from "@/lib/i18n/routing";
-import { ArrowLeft, Send, UserPlus, ExternalLink } from "lucide-react";
+import { ArrowLeft, Send, UserPlus } from "lucide-react";
+import { StatCard } from "@/components/shared";
 
 export default function CreatorDetailPage() {
   const params = useParams();
@@ -120,11 +121,11 @@ export default function CreatorDetailPage() {
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-5">
-        <StatCard label={t("creators.followers")} value={formatCompactNumber(creator.followers, locale)} />
-        <StatCard label={t("creators.engagement")} value={`${creator.engagementRate ?? 0}%`} />
-        <StatCard label={t("creators.gmv")} value={formatCurrency(Number(creator.gmv ?? 0), locale)} />
-        <StatCard label={t("creators.avgViews")} value={formatCompactNumber(creator.avgViews ?? 0, locale)} />
-        <StatCard label={t("creators.totalVideos")} value={String(creator.totalVideos ?? 0)} />
+        <StatCard compact title={t("creators.followers")} value={formatCompactNumber(creator.followers, locale)} />
+        <StatCard compact title={t("creators.engagement")} value={`${creator.engagementRate ?? 0}%`} />
+        <StatCard compact title={t("creators.gmv")} value={formatCurrency(Number(creator.gmv ?? 0), locale)} />
+        <StatCard compact title={t("creators.avgViews")} value={formatCompactNumber(creator.avgViews ?? 0, locale)} />
+        <StatCard compact title={t("creators.totalVideos")} value={String(creator.totalVideos ?? 0)} />
       </div>
 
       {/* Details */}
@@ -223,16 +224,5 @@ export default function CreatorDetailPage() {
         </Card>
       </div>
     </div>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <Card>
-      <CardContent className="pt-4 pb-4">
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-xl font-bold font-mono mt-1">{value}</p>
-      </CardContent>
-    </Card>
   );
 }
