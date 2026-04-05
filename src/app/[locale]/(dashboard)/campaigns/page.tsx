@@ -171,14 +171,60 @@ function ContestsTab() {
 }
 
 function CompetitorsTab() {
+  const t = useTranslations("common");
   const { data, isLoading } = trpc.campaign.listCompetitors.useQuery();
+  const [showForm, setShowForm] = useState(false);
+  const [compName, setCompName] = useState("");
+  const [compUrl, setCompUrl] = useState("");
+  const [compCategory, setCompCategory] = useState("");
+  const utils = trpc.useUtils();
+
+  const addCompetitor = trpc.campaign.addCompetitor.useMutation({
+    onSuccess: () => {
+      setShowForm(false);
+      setCompName("");
+      setCompUrl("");
+      setCompCategory("");
+      utils.campaign.listCompetitors.invalidate();
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <p className="text-muted-foreground">Monitor competitor brands and their creator partnerships.</p>
-        <Button><Plus className="mr-2 h-4 w-4" />Add Competitor</Button>
+        <Button onClick={() => setShowForm(!showForm)}><Plus className="mr-2 h-4 w-4" />Add Competitor</Button>
       </div>
+
+      {showForm && (
+        <Card>
+          <CardContent className="pt-6 flex flex-col gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <Label>Brand Name</Label>
+                <Input value={compName} onChange={(e) => setCompName(e.target.value)} placeholder="Rival Brand" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Category</Label>
+                <Input value={compCategory} onChange={(e) => setCompCategory(e.target.value)} placeholder="Beauty" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>TikTok Shop URL (optional)</Label>
+              <Input value={compUrl} onChange={(e) => setCompUrl(e.target.value)} placeholder="https://tiktok.com/shop/brand" />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowForm(false)}>{t("cancel")}</Button>
+              <Button
+                onClick={() => addCompetitor.mutate({ name: compName, tiktokShopUrl: compUrl || undefined, category: compCategory || undefined })}
+                disabled={!compName || addCompetitor.isPending}
+              >
+                {addCompetitor.isPending ? t("loading") : t("create")}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       {isLoading ? (
         <Skeleton className="h-32" />
       ) : (data ?? []).length === 0 ? (
